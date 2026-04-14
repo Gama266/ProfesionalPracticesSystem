@@ -30,22 +30,22 @@ public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtRegisterResponsible =
+            try (PreparedStatement stamentRegisterResponsible =
                          connection.prepareStatement(queryRegisterResponsible)) {
 
-                stmtRegisterResponsible.setString(1, newResponsible.getName());
-                stmtRegisterResponsible.setString(2, newResponsible.getPaternalSurname());
-                stmtRegisterResponsible.setString(3, newResponsible.getMaternalSurname());
-                stmtRegisterResponsible.setString(4, newResponsible.getPhoneNumber());
-                stmtRegisterResponsible.setString(5, newResponsible.getGmail());
+                stamentRegisterResponsible.setString(1, newResponsible.getName());
+                stamentRegisterResponsible.setString(2, newResponsible.getPaternalSurname());
+                stamentRegisterResponsible.setString(3, newResponsible.getMaternalSurname());
+                stamentRegisterResponsible.setString(4, newResponsible.getPhoneNumber());
+                stamentRegisterResponsible.setString(5, newResponsible.getGmail());
 
                 if (newResponsible.getLinkedOrganization() != null) {
-                    stmtRegisterResponsible.setInt(6, newResponsible.getLinkedOrganization().getId());
+                    stamentRegisterResponsible.setInt(6, newResponsible.getLinkedOrganization().getId());
                 } else {
-                    stmtRegisterResponsible.setNull(6, Types.INTEGER);
+                    stamentRegisterResponsible.setNull(6, Types.INTEGER);
                 }
 
-                int rowsAffected = stmtRegisterResponsible.executeUpdate();
+                int rowsAffected = stamentRegisterResponsible.executeUpdate();
                 return rowsAffected > 0;
             }
 
@@ -63,24 +63,24 @@ public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtUpdateResponsible =
+            try (PreparedStatement stamentUpdateResponsible =
                          connection.prepareStatement(queryUpdateResponsible)) {
 
-                stmtUpdateResponsible.setString(1, responsible.getName());
-                stmtUpdateResponsible.setString(2, responsible.getPaternalSurname());
-                stmtUpdateResponsible.setString(3, responsible.getMaternalSurname());
-                stmtUpdateResponsible.setString(4, responsible.getPhoneNumber());
-                stmtUpdateResponsible.setString(5, responsible.getGmail());
+                stamentUpdateResponsible.setString(1, responsible.getName());
+                stamentUpdateResponsible.setString(2, responsible.getPaternalSurname());
+                stamentUpdateResponsible.setString(3, responsible.getMaternalSurname());
+                stamentUpdateResponsible.setString(4, responsible.getPhoneNumber());
+                stamentUpdateResponsible.setString(5, responsible.getGmail());
 
                 if (responsible.getLinkedOrganization() != null) {
-                    stmtUpdateResponsible.setInt(6, responsible.getLinkedOrganization().getId());
+                    stamentUpdateResponsible.setInt(6, responsible.getLinkedOrganization().getId());
                 } else {
-                    stmtUpdateResponsible.setNull(6, Types.INTEGER);
+                    stamentUpdateResponsible.setNull(6, Types.INTEGER);
                 }
 
-                stmtUpdateResponsible.setInt(7, responsible.getId());
+                stamentUpdateResponsible.setInt(7, responsible.getId());
 
-                int rowsAffected = stmtUpdateResponsible.executeUpdate();
+                int rowsAffected = stamentUpdateResponsible.executeUpdate();
                 return rowsAffected > 0;
             }
 

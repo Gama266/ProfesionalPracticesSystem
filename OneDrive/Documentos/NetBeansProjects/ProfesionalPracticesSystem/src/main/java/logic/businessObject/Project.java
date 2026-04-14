@@ -21,6 +21,7 @@ public class Project {
     
     private LinkedOrganization linkedOrganization;
     private Teacher teacher;
+    private TechnicalResponsable technicalResponsable;
 
     public Project() {
     }

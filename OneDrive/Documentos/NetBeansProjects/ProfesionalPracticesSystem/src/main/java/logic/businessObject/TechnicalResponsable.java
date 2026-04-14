@@ -10,7 +10,7 @@ package logic.businessObject;
  */
 public class TechnicalResponsable {
     
-}   private int id;
+   private int id;
     private String name;
     private String paternalSurname;
     private String maternalSurname;
@@ -18,8 +18,9 @@ public class TechnicalResponsable {
     private String gmail;
     private LinkedOrganization linkedOrganization;
 
-    public TechnicalResponsible() {
+    public TechnicalResponsable() { 
     }
+    
     
     
     public int getId() {
@@ -78,4 +79,4 @@ public class TechnicalResponsable {
         this.linkedOrganization = linkedOrganization;
     }
     
-    
+}

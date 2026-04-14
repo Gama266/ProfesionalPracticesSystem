@@ -58,16 +58,16 @@ public class TeacherDAO implements ITeacherDAO {
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtUpdateTeacher =
+            try (PreparedStatement stamentUpdateTeacher =
                          connection.prepareStatement(queryUpdateTeacher)) {
 
-                stmtUpdateTeacher.setString(1, teacher.getPassword());
-                stmtUpdateTeacher.setString(2, teacher.getPaternaSurname());
-                stmtUpdateTeacher.setString(3, teacher.getMaternalSurname());
-                stmtUpdateTeacher.setBoolean(4, teacher.getActivityStatus());
-                stmtUpdateTeacher.setInt(5, teacher.getNoPersonal());
+                stamentUpdateTeacher.setString(1, teacher.getPassword());
+                stamentUpdateTeacher.setString(2, teacher.getPaternaSurname());
+                stamentUpdateTeacher.setString(3, teacher.getMaternalSurname());
+                stamentUpdateTeacher.setBoolean(4, teacher.getActivityStatus());
+                stamentUpdateTeacher.setInt(5, teacher.getNoPersonal());
 
-                int rowsAffected = stmtUpdateTeacher.executeUpdate();
+                int rowsAffected = stamentUpdateTeacher.executeUpdate();
                 return rowsAffected > 0;
             }
 

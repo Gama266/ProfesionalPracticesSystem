@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import logic.businessObject.Activity;
+import logic.businessObject.Student;
 
 /**
  *
@@ -57,7 +58,7 @@ public class ActivityDAO implements IActivityDAO{
         List<Activity> activities = new ArrayList<>();
     String sql = "SELECT * FROM actividad ORDER BY fechaActividad DESC";
     
-    try (Connection conn = ConnectionDatabase.getConnection();
+    try (Connection conn = ConfigDatabase.getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql);
          ResultSet rs = pstmt.executeQuery()) {
         

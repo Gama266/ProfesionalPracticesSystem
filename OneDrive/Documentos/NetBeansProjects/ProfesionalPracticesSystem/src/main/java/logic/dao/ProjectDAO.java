@@ -7,6 +7,7 @@ package logic.dao;
 /**
  *
  * @author gamal
+ * @version1.0
  */
 
 import dataacces.ConfigDatabase;
@@ -31,37 +32,37 @@ public class ProjectDAO implements IProjectDAO {
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtRegisterProject =
+            try (PreparedStatement stamentRegisterProject =
                          connection.prepareStatement(queryRegisterProject)) {
 
-                stmtRegisterProject.setString(1, newProject.getName());
-                stmtRegisterProject.setString(2, newProject.getDescription());
-                stmtRegisterProject.setString(3, newProject.getMetodology());
-                stmtRegisterProject.setBoolean(4, newProject.isActivityStatus());
-                stmtRegisterProject.setString(5, newProject.getObjective());
+                stamentRegisterProject.setString(1, newProject.getName());
+                stamentRegisterProject.setString(2, newProject.getDescription());
+                stamentRegisterProject.setString(3, newProject.getMetodology());
+                stamentRegisterProject.setBoolean(4, newProject.isActivityStatus());
+                stamentRegisterProject.setString(5, newProject.getObjective());
 
                 if (newProject.getRegistrationDate() != null) {
-                    stmtRegisterProject.setDate(6, Date.valueOf(newProject.getRegistrationDate()));
+                    stamentRegisterProject.setDate(6, Date.valueOf(newProject.getRegistrationDate()));
                 } else {
-                    stmtRegisterProject.setNull(6, Types.DATE);
+                    stamentRegisterProject.setNull(6, Types.DATE);
                 }
 
                 if (newProject.getLinkedOrganization() != null) {
-                    stmtRegisterProject.setInt(7, newProject.getLinkedOrganization().getId());
+                    stamentRegisterProject.setInt(7, newProject.getLinkedOrganization().getId());
                 } else {
-                    stmtRegisterProject.setNull(7, Types.INTEGER);
+                    stamentRegisterProject.setNull(7, Types.INTEGER);
                 }
 
                 if (newProject.getTeacher() != null) {
-                    stmtRegisterProject.setInt(8, newProject.getTeacher().getNoPersonal());
+                    stamentRegisterProject.setInt(8, newProject.getTeacher().getNoPersonal());
                 } else {
-                    stmtRegisterProject.setNull(8, Types.INTEGER);
+                    stamentRegisterProject.setNull(8, Types.INTEGER);
                 }
 
-                if (newProject.getIdResponsableTecnico() > 0) {
-                    stmtRegisterProject.setInt(9, newProject.getIdResponsableTecnico());
+                if (newProject.getIdTechnicalResponsable()) {
+                    stamentRegisterProject.setInt(9, newProject.getIdTechnicalResponsable());
                 } else {
-                    stmtRegisterProject.setNull(9, Types.INTEGER);
+                    stamentRegisterProject.setNull(9, Types.INTEGER);
                 }
 
                 int rowsAffected = stmtRegisterProject.executeUpdate();
@@ -80,7 +81,7 @@ public class ProjectDAO implements IProjectDAO {
             "UPDATE Proyecto SET nombre = ?, descripcion = ?, metodologia = ?, estadoActividad = ?, objetivos = ?, `fecha registro` = ?, idOrganizacionVinculada = ?, noPersonal = ?, idResponsableTecnico = ? WHERE idProyecto = ?";
 
         try {
-            Connection connection = ConfigDatabase.buildConnection();
+            Connection connection = ConfigDatabase.getConnection();
 
             try (PreparedStatement stmtUpdateProject =
                          connection.prepareStatement(queryUpdateProject)) {
@@ -109,7 +110,7 @@ public class ProjectDAO implements IProjectDAO {
                     stmtUpdateProject.setNull(8, Types.INTEGER);
                 }
 
-                if (project.getIdResponsableTecnico() > 0) {
+                if (project.getIdResponsableTecnico()) {
                     stmtUpdateProject.setInt(9, project.getIdResponsableTecnico());
                 } else {
                     stmtUpdateProject.setNull(9, Types.INTEGER);

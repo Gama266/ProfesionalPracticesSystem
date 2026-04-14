@@ -4,10 +4,11 @@
  */
 package dataacces;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
-
-/**
- *
+ /*
  * @author gamal
  */
 public class ConfigDatabase {
@@ -47,7 +48,10 @@ public class ConfigDatabase {
     public static String getPassword() {
         return properties.getProperty("database.password");
     }
-    
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(getUrl(), getUsername(), getPassword());
+    }
     
 }
 

@@ -26,14 +26,14 @@ public class ReportDAO implements IReportDAO {
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtRegisterReport =
+            try (PreparedStatement stamentRegisterReport =
                          connection.prepareStatement(queryRegisterReport)) {
 
-                stmtRegisterReport.setString(1, newReport.getUrl());
-                stmtRegisterReport.setString(2, newReport.getTypeOfReport());
+                stamentRegisterReport.setString(1, newReport.getUrl());
+                stamentRegisterReport.setString(2, newReport.getTypeOfReport());
 
                 if (newReport.getStudent() != null) {
-                    stmtRegisterReport.setString(3, newReport.getStudent().getMatricula());
+                    stamentRegisterReport.setString(3, newReport.getStudent().getMatricula());
                 } else {
                     stmtRegisterReport.setNull(3, Types.VARCHAR);
                 }
@@ -56,21 +56,21 @@ public class ReportDAO implements IReportDAO {
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtUpdateReport =
+            try (PreparedStatement stamentUpdateReport =
                          connection.prepareStatement(queryUpdateReport)) {
 
-                stmtUpdateReport.setString(1, report.getUrl());
-                stmtUpdateReport.setString(2, report.getTypeOfReport());
+                stamentUpdateReport.setString(1, report.getUrl());
+                stamentUpdateReport.setString(2, report.getTypeOfReport());
 
                 if (report.getStudent() != null) {
-                    stmtUpdateReport.setString(3, report.getStudent().getMatricula());
+                    stamentUpdateReport.setString(3, report.getStudent().getMatricula());
                 } else {
-                    stmtUpdateReport.setNull(3, Types.VARCHAR);
+                    stamentpdateReport.setNull(3, Types.VARCHAR);
                 }
 
-                stmtUpdateReport.setInt(4, report.getId());
+                stamentUpdateReport.setInt(4, report.getId());
 
-                int rowsAffected = stmtUpdateReport.executeUpdate();
+                int rowsAffected = stamentUpdateReport.executeUpdate();
                 return rowsAffected > 0;
             }
 

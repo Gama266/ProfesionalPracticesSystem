@@ -8,13 +8,13 @@ package logic.businessObject;
  *
  * @author akyer
  */
-public class InitialFormarts {
+public class InitialFormats {
     private int id;
     private String url;
     private String typeOfDocument;
     private Student student;
 
-    public InitialFormarts() {
+    public InitialFormats() {
     }
 
     
