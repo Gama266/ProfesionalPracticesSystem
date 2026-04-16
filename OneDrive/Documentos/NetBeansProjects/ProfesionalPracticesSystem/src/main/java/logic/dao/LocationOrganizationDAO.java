@@ -5,63 +5,63 @@
 package logic.dao;
 
 import dataacces.ConfigDatabase;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Connection;
 import logic.businessObject.LocationOrganization;
-
+import logic.exceptions.DAOException;
+import logic.idao.ILocationOrganizationDAO;
 
 /**
- *
- * @author gamal
+ * * @author gamal
  */
 public class LocationOrganizationDAO implements ILocationOrganizationDAO {
-    @Override
-    public boolean registerLocation(LocationOrganization newLocation) throws RuntimeException {
 
-        String queryRegisterLocation =
-            "INSERT INTO LocationOrganization (country, state) VALUES (?, ?)";
+    @Override
+    public boolean registerLocation(LocationOrganization newLocation) throws DAOException {
+ 
+        String queryRegisterLocation = "INSERT INTO ubicacion (pais, estado) VALUES (?, ?)";
 
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtRegisterLocation =
+            try (PreparedStatement stamentRegisterLocation = 
                          connection.prepareStatement(queryRegisterLocation)) {
 
-                stmtRegisterLocation.setString(1, newLocation.getCountry());
-                stmtRegisterLocation.setString(2, newLocation.getState());
+                stamentRegisterLocation.setString(1, newLocation.getCountry());
+                stamentRegisterLocation.setString(2, newLocation.getState());
 
-                int rowsAffected = stmtRegisterLocation.executeUpdate();
+                int rowsAffected = stamentRegisterLocation.executeUpdate();
                 return rowsAffected > 0;
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al registrar la ubicación", exceptionDB);
+           
+            throw new DAOException("Error registrando la ubicacion", exceptionDB);
         }
     }
 
     @Override
-    public boolean updateLocation(LocationOrganization location) throws RuntimeException {
-
-        String queryUpdateLocation =
-            "UPDATE LocationOrganization SET country = ?, state = ? WHERE id = ?";
+    public boolean updateLocation(LocationOrganization location) throws DAOException {
+    
+        String queryUpdateLocation = "UPDATE ubicacion SET pais = ?, estado = ? WHERE idUbicacion = ?";
 
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtUpdateLocation =
+            try (PreparedStatement stamentUpdateLocation = 
                          connection.prepareStatement(queryUpdateLocation)) {
 
-                stmtUpdateLocation.setString(1, location.getCountry());
-                stmtUpdateLocation.setString(2, location.getState());
-                stmtUpdateLocation.setInt(3, location.getId());
+                stamentUpdateLocation.setString(1, location.getCountry());
+                stamentUpdateLocation.setString(2, location.getState());
+                stamentUpdateLocation.setInt(3, location.getId());
 
-                int rowsAffected = stmtUpdateLocation.executeUpdate();
+                int rowsAffected = stamentUpdateLocation.executeUpdate();
                 return rowsAffected > 0;
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al actualizar la ubicación", exceptionDB);
+            throw new DAOException("Error al actualizar", exceptionDB);
         }
-}
+    }
 }

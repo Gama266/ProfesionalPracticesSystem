@@ -11,22 +11,22 @@ import java.time.LocalDate;
  * @author gamal
  */
 public class Project {
-        private int id;
+    
+    private int id;
     private String name;
     private String description;
-    private String metodology;
+    private String methodology; 
     private boolean activityStatus;
     private String objective;
     private LocalDate registrationDate;
     
     private LinkedOrganization linkedOrganization;
     private Teacher teacher;
-    private TechnicalResponsable technicalResponsable;
+    private TechnicalResponsible technicalResponsible;
 
     public Project() {
     }
 
-            
     public int getId() {
         return id;
     }
@@ -51,12 +51,12 @@ public class Project {
         this.description = description;
     }
 
-    public String getMetodology() {
-        return metodology;
+    public String getMethodology() {
+        return methodology;
     }
 
-    public void setMetodology(String metodology) {
-        this.metodology = metodology;
+    public void setMethodology(String methodology) {
+        this.methodology = methodology;
     }
 
     public boolean isActivityStatus() {
@@ -83,12 +83,12 @@ public class Project {
         this.registrationDate = registrationDate;
     }
 
-    public LinkedOrganization getLinjedOrganization() {
+    public LinkedOrganization getLinkedOrganization() {
         return linkedOrganization;
     }
 
-    public void setLinjedOrganization(LinkedOrganization linjedOrganization) {
-        this.linkedOrganization = linjedOrganization;
+    public void setLinkedOrganization(LinkedOrganization linkedOrganization) { 
+        this.linkedOrganization = linkedOrganization;
     }
 
     public Teacher getTeacher() {
@@ -98,7 +98,13 @@ public class Project {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
-    
+
+  
+    public TechnicalResponsible getTechnicalResponsible() {
+        return technicalResponsible;
+    }
+
+    public void setTechnicalResponsible(TechnicalResponsible technicalResponsible) {
+        this.technicalResponsible = technicalResponsible;
+    }
 }
-
-

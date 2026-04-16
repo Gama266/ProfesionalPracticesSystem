@@ -10,11 +10,12 @@ package logic.businessObject;
  */
 public class Teacher {
     
-   private int noPersonal;
+    private int noPersonal;
     private String password;
-    private String paternaSurname;
+    private String name; 
+    private String paternalSurname; 
     private String maternalSurname;
-    private Boolean activityStatus;
+    private boolean activityStatus; 
 
     public Teacher() {
     }
@@ -35,12 +36,20 @@ public class Teacher {
         this.password = password;
     }
 
-    public String getPaternaSurname() {
-        return paternaSurname;
+    public String getName() {
+        return name;
     }
 
-    public void setPaternaSurname(String paternaSurname) {
-        this.paternaSurname = paternaSurname;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPaternalSurname() {
+        return paternalSurname;
+    }
+
+    public void setPaternalSurname(String paternalSurname) {
+        this.paternalSurname = paternalSurname;
     }
 
     public String getMaternalSurname() {
@@ -51,13 +60,11 @@ public class Teacher {
         this.maternalSurname = maternalSurname;
     }
 
-    public Boolean getActivityStatus() {
+    public boolean isActivityStatus() {
         return activityStatus;
     }
 
-    public void setActivityStatus(Boolean activityStatus) {
+    public void setActivityStatus(boolean activityStatus) {
         this.activityStatus = activityStatus;
     }
-    
 }
-

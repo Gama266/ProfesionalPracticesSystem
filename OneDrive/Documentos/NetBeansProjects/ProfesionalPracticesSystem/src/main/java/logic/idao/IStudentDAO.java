@@ -4,10 +4,15 @@
  */
 package logic.idao;
 
+import logic.businessObject.Student;
+import logic.exceptions.DAOException;
+
 /**
  *
  * @author gamal
  */
 public interface IStudentDAO {
-    
+     boolean registerStudent(Student newStudent) throws DAOException;
+    boolean updateStudent(Student student) throws DAOException;
+   
 }

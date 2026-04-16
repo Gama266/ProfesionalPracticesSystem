@@ -8,7 +8,7 @@ package logic.businessObject;
  *
  * @author gamal
  */
-public class TechnicalResponsable {
+public class TechnicalResponsible {
     
    private int id;
     private String name;
@@ -18,7 +18,7 @@ public class TechnicalResponsable {
     private String gmail;
     private LinkedOrganization linkedOrganization;
 
-    public TechnicalResponsable() { 
+    public TechnicalResponsible() { 
     }
     
     

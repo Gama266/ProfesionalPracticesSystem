@@ -4,89 +4,95 @@
  */
 package logic.dao;
 
-/**
- *
- * @author gamal
- */
+
 import dataacces.ConfigDatabase;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import logic.businessObject.Student;
+import logic.exceptions.DAOException;
+import logic.idao.IStudentDAO;
 
-
-
-
+/**
+ * * @author gamal
+ */
 public class StudentDAO implements IStudentDAO {
 
     @Override
-    public boolean registerStudent(Student newStudent) throws RuntimeException {
-
+    public boolean registerStudent(Student newStudent) throws DAOException {
+       
         String queryRegisterStudent =
-            "INSERT INTO Estudiante (matricula, nombre, apellidoPaterno, apellidoMaterno, estadoActividad, password, idProyecto) " +
+            "INSERT INTO practicante (matricula, nombre, apellidoPaterno, apellidoMaterno, estadoActividad, contrasena, idProyecto) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtRegisterStudent =
+            try (PreparedStatement stamentRegisterStudent =
                          connection.prepareStatement(queryRegisterStudent)) {
 
-                stmtRegisterStudent.setString(1, newStudent.getMatricula());
-                stmtRegisterStudent.setString(2, newStudent.getName());
-                stmtRegisterStudent.setString(3, newStudent.getPaternalSurname());
-                stmtRegisterStudent.setString(4, newStudent.getMaternalSurname());
-                stmtRegisterStudent.setBoolean(5, newStudent.getActivityStatus());
-                stmtRegisterStudent.setString(6, newStudent.getPassword());
+                stamentRegisterStudent.setString(1, newStudent.getMatricula());
+                stamentRegisterStudent.setString(2, newStudent.getName());
+                stamentRegisterStudent.setString(3, newStudent.getPaternalSurname());
+                stamentRegisterStudent.setString(4, newStudent.getMaternalSurname());
+                
+              
+                String status = newStudent.getActivityStatus() ? "Active" : "Inactive";
+                stamentRegisterStudent.setString(5, status);
+                
+                stamentRegisterStudent.setString(6, newStudent.getPassword());
 
                 if (newStudent.getProject() != null) {
-                    stmtRegisterStudent.setInt(7, newStudent.getProject().getId());
+                    stamentRegisterStudent.setInt(7, newStudent.getProject().getId());
                 } else {
-                    stmtRegisterStudent.setNull(7, Types.INTEGER);
+                    stamentRegisterStudent.setNull(7, Types.INTEGER);
                 }
 
-                int rowsAffected = stmtRegisterStudent.executeUpdate();
+                int rowsAffected = stamentRegisterStudent.executeUpdate();
                 return rowsAffected > 0;
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al registrar el estudiante", exceptionDB);
+            throw new DAOException("Error registrando al estudiante", exceptionDB);
         }
     }
 
     @Override
-    public boolean updateStudent(Student student) throws RuntimeException {
-
+    public boolean updateStudent(Student student) throws DAOException {
+        
         String queryUpdateStudent =
-            "UPDATE Estudiante SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, estadoActividad = ?, password = ?, idProyecto = ? WHERE matricula = ?";
+            "UPDATE practicante SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, estadoActividad = ?, contrasena = ?, idProyecto = ? WHERE matricula = ?";
 
         try {
             Connection connection = ConfigDatabase.getConnection();
 
-            try (PreparedStatement stmtUpdateStudent =
+            try (PreparedStatement stamentUpdateStudent =
                          connection.prepareStatement(queryUpdateStudent)) {
 
-                stmtUpdateStudent.setString(1, student.getName());
-                stmtUpdateStudent.setString(2, student.getPaternalSurname());
-                stmtUpdateStudent.setString(3, student.getMaternalSurname());
-                stmtUpdateStudent.setBoolean(4, student.getActivityStatus());
-                stmtUpdateStudent.setString(5, student.getPassword());
+                stamentUpdateStudent.setString(1, student.getName());
+                stamentUpdateStudent.setString(2, student.getPaternalSurname());
+                stamentUpdateStudent.setString(3, student.getMaternalSurname());
+                
+                String status = student.getActivityStatus() ? "Active" : "Inactive";
+                stamentUpdateStudent.setString(4, status);
+                
+                stamentUpdateStudent.setString(5, student.getPassword());
 
                 if (student.getProject() != null) {
-                    stmtUpdateStudent.setInt(6, student.getProject().getId());
+                    stamentUpdateStudent.setInt(6, student.getProject().getId());
                 } else {
-                    stmtUpdateStudent.setNull(6, Types.INTEGER);
+                    stamentUpdateStudent.setNull(6, Types.INTEGER);
                 }
 
-                stmtUpdateStudent.setString(7, student.getMatricula());
+                stamentUpdateStudent.setString(7, student.getMatricula());
 
-                int rowsAffected = stmtUpdateStudent.executeUpdate();
+                int rowsAffected = stamentUpdateStudent.executeUpdate();
                 return rowsAffected > 0;
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al actualizar el estudiante", exceptionDB);
+            throw new DAOException("Error actualizando las modificaciones", exceptionDB);
         }
     }
 }

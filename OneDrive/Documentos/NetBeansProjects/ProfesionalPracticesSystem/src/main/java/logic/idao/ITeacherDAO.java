@@ -4,10 +4,16 @@
  */
 package logic.idao;
 
+import logic.businessObject.Teacher;
+import logic.exceptions.DAOException;
+
 /**
- *
+ * Interface for Teacher data access operations.
  * @author gamal
  */
 public interface ITeacherDAO {
     
+    boolean registerTeacher(Teacher newTeacher) throws DAOException;
+
+    boolean updateTeacher(Teacher teacher) throws DAOException;
 }

@@ -4,10 +4,14 @@
  */
 package logic.idao;
 
+import logic.businessObject.Project;
+import logic.exceptions.DAOException;
+
 /**
  *
  * @author gamal
  */
 public interface IProjectDAO {
-    
+    boolean registerProject(Project newProject) throws DAOException;
+    boolean updateProject(Project project) throws DAOException;
 }

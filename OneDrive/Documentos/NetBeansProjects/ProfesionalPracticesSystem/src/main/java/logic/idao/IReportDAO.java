@@ -4,10 +4,16 @@
  */
 package logic.idao;
 
+import logic.businessObject.Report;
+import logic.exceptions.DAOException;
+
 /**
  *
  * @author gamal
  */
 public interface IReportDAO {
-    
+    boolean registerReport(Report newReport) throws DAOException;
+
+ 
+    boolean updateReport(Report report) throws DAOException;
 }

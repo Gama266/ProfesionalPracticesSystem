@@ -13,7 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import logic.businessObject.TechnicalResponsable;
+import logic.businessObject.TechnicalResponsible;
 
 
 
@@ -21,7 +21,7 @@ import logic.businessObject.TechnicalResponsable;
 public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
 
     @Override
-    public boolean registerTechnicalResponsible(TechnicalResponsable newResponsible) throws RuntimeException {
+    public boolean registerTechnicalResponsible(TechnicalResponsible newResponsible) throws RuntimeException {
 
         String queryRegisterResponsible =
             "INSERT INTO ResponsableTecnico (nombre, apellidoPaterno, apellidoMaterno, telefono, gmail, idOrganizacionVinculada) " +
@@ -55,7 +55,7 @@ public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
     }
 
     @Override
-    public boolean updateTechnicalResponsible(TechnicalResponsable responsible) throws RuntimeException {
+    public boolean updateTechnicalResponsible(TechnicalResponsible responsible) throws RuntimeException {
 
         String queryUpdateResponsible =
             "UPDATE ResponsableTecnico SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, telefono = ?, gmail = ?, idOrganizacionVinculada = ? WHERE id = ?";

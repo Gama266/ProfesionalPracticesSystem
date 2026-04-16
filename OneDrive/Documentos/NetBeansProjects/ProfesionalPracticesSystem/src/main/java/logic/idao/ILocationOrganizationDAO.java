@@ -4,11 +4,15 @@
  */
 package logic.idao;
 
+import logic.businessObject.LocationOrganization;
+import logic.exceptions.DAOException;
+
 /**
  *
  * @author gamal
  */
 public interface ILocationOrganizationDAO {
-    
+    boolean updateLocation(LocationOrganization location) throws DAOException;
+    boolean registerLocation(LocationOrganization newLocation) throws DAOException;
     
 }

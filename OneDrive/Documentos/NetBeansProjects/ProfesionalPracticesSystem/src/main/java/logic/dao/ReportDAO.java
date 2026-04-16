@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import logic.businessObject.Report;
+import logic.exceptions.DAOException; 
+import logic.idao.IReportDAO;
 
 /**
  *
@@ -18,7 +20,7 @@ import logic.businessObject.Report;
 public class ReportDAO implements IReportDAO {
 
     @Override
-    public boolean registerReport(Report newReport) throws RuntimeException {
+    public boolean registerReport(Report newReport) throws DAOException {
 
         String queryRegisterReport =
             "INSERT INTO Reporte (url, tipoReporte, matricula) VALUES (?, ?, ?)";
@@ -35,20 +37,20 @@ public class ReportDAO implements IReportDAO {
                 if (newReport.getStudent() != null) {
                     stamentRegisterReport.setString(3, newReport.getStudent().getMatricula());
                 } else {
-                    stmtRegisterReport.setNull(3, Types.VARCHAR);
+                    stamentRegisterReport.setNull(3, Types.VARCHAR); 
                 }
 
-                int rowsAffected = stmtRegisterReport.executeUpdate();
+                int rowsAffected = stamentRegisterReport.executeUpdate(); 
                 return rowsAffected > 0;
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al registrar el reporte", exceptionDB);
+            throw new DAOException("Error registrando el reporte", exceptionDB);
         }
     }
 
     @Override
-    public boolean updateReport(Report report) throws RuntimeException {
+    public boolean updateReport(Report report) throws DAOException {
 
         String queryUpdateReport =
             "UPDATE Reporte SET url = ?, tipoReporte = ?, matricula = ? WHERE id = ?";
@@ -65,7 +67,7 @@ public class ReportDAO implements IReportDAO {
                 if (report.getStudent() != null) {
                     stamentUpdateReport.setString(3, report.getStudent().getMatricula());
                 } else {
-                    stamentpdateReport.setNull(3, Types.VARCHAR);
+                    stamentUpdateReport.setNull(3, Types.VARCHAR); 
                 }
 
                 stamentUpdateReport.setInt(4, report.getId());
@@ -75,9 +77,7 @@ public class ReportDAO implements IReportDAO {
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al actualizar el reporte", exceptionDB);
+            throw new DAOException("Error actualizando el proyecto", exceptionDB);
         }
     }
-
-   
 }
