@@ -16,4 +16,5 @@ public interface ITeacherDAO {
     boolean registerTeacher(Teacher newTeacher) throws DAOException;
 
     boolean updateTeacher(Teacher teacher) throws DAOException;
+   
 }

@@ -11,9 +11,9 @@ import java.sql.SQLException;
  * @author gamal
  */
 
-
+//completar lo faltante, el uso de ia, revisar comentarios, hacer las pruebas
  
-public class DAOException extends RuntimeException {
+public class DAOException extends Exception {
     public DAOException(String message, SQLException exceptionDB) {
         super(message);
     }

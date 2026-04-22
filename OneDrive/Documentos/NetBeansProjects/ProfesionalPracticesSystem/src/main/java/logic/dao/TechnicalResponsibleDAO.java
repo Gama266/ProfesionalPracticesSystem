@@ -4,27 +4,25 @@
  */
 package logic.dao;
 
-/**
- *
- * @author gamal
- */
 import dataacces.ConfigDatabase;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import logic.businessObject.TechnicalResponsible;
+import logic.exceptions.DAOException;
+import logic.idao.ITechnicalResponsibleDAO;
 
-
-
-
+/**
+ * @author gamal
+ */
 public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
 
     @Override
-    public boolean registerTechnicalResponsible(TechnicalResponsible newResponsible) throws RuntimeException {
-
+    public boolean registerTechnicalResponsible(TechnicalResponsible newResponsible) throws DAOException {
+      
         String queryRegisterResponsible =
-            "INSERT INTO ResponsableTecnico (nombre, apellidoPaterno, apellidoMaterno, telefono, gmail, idOrganizacionVinculada) " +
+            "INSERT INTO responsabletecnico (nombre, apellidoPaterno, apellidoMaterno, numeroTelefono, correoElectronico, idOrganizacionVinculada) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
@@ -37,7 +35,7 @@ public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
                 stamentRegisterResponsible.setString(2, newResponsible.getPaternalSurname());
                 stamentRegisterResponsible.setString(3, newResponsible.getMaternalSurname());
                 stamentRegisterResponsible.setString(4, newResponsible.getPhoneNumber());
-                stamentRegisterResponsible.setString(5, newResponsible.getGmail());
+                stamentRegisterResponsible.setString(5, newResponsible.getGmail()); 
 
                 if (newResponsible.getLinkedOrganization() != null) {
                     stamentRegisterResponsible.setInt(6, newResponsible.getLinkedOrganization().getId());
@@ -50,15 +48,16 @@ public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al registrar el responsable técnico", exceptionDB);
+            throw new DAOException("Error registering the technical responsible", exceptionDB);
         }
     }
 
     @Override
-    public boolean updateTechnicalResponsible(TechnicalResponsible responsible) throws RuntimeException {
-
+    public boolean updateTechnicalResponsible(TechnicalResponsible responsible) throws DAOException {
+      
         String queryUpdateResponsible =
-            "UPDATE ResponsableTecnico SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, telefono = ?, gmail = ?, idOrganizacionVinculada = ? WHERE id = ?";
+            "UPDATE responsabletecnico SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, numeroTelefono = ?, correoElectronico = ?, idOrganizacionVinculada = ? " +
+            "WHERE idResponsableTecnico = ?";
 
         try {
             Connection connection = ConfigDatabase.getConnection();
@@ -85,7 +84,7 @@ public class TechnicalResponsibleDAO implements ITechnicalResponsibleDAO {
             }
 
         } catch (SQLException exceptionDB) {
-            throw new RuntimeException("Error al actualizar el responsable técnico", exceptionDB);
+            throw new DAOException("Error updating the technical responsible", exceptionDB);
         }
     }
 }

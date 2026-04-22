@@ -94,5 +94,28 @@ public class StudentDAO implements IStudentDAO {
         } catch (SQLException exceptionDB) {
             throw new DAOException("Error actualizando las modificaciones", exceptionDB);
         }
+        
+    }
+    
+    @Override
+    public boolean deleteStudent(String matricula) throws DAOException {
+        
+        String queryDeleteStudent = "DELETE FROM practicante WHERE matricula = ?";
+
+        try {
+            Connection connection = ConfigDatabase.getConnection();
+
+            try (PreparedStatement statementDeleteStudent = 
+                         connection.prepareStatement(queryDeleteStudent)) {
+
+                statementDeleteStudent.setString(1, matricula);
+
+                int rowsAffected = statementDeleteStudent.executeUpdate();
+                return rowsAffected > 0;
+            }
+
+        } catch (SQLException exceptionDB) {
+            throw new DAOException("Error eliminando al estudiante", exceptionDB);
+        }
     }
 }

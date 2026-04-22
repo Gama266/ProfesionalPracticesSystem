@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import logic.businessObject.SelfAssessment;
+import logic.idao.ISelfAssessmentDAO;
 
 
 /**
@@ -19,7 +19,7 @@ import logic.businessObject.SelfAssessment;
  * @version1.0
  */
 public class SelfAssessmentDAO implements ISelfAssessmentDAO {
-
+/*
     @Override
     public boolean registerSelfAssessment(SelfAssessment selfAssessment) throws SQLException {
     String sql = "INSERT INTO autoevaluacion (url, calificacion, matricula) VALUES (?, ?, ?)";
@@ -68,5 +68,5 @@ public class SelfAssessmentDAO implements ISelfAssessmentDAO {
     } catch (SQLException e) {
         System.err.println("Error al mostrar: " + e.getMessage());
     }
-    }
+    }*/
 }

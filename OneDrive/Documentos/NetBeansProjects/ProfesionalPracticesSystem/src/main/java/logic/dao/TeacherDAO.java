@@ -13,7 +13,7 @@ import logic.exceptions.DAOException;
 import logic.idao.ITeacherDAO;
 
 /**
- * Data Access Object for Teacher.
+ 
  * @author gamal
  */
 public class TeacherDAO implements ITeacherDAO {

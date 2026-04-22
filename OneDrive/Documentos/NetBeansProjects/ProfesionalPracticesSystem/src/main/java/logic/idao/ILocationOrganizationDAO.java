@@ -14,5 +14,5 @@ import logic.exceptions.DAOException;
 public interface ILocationOrganizationDAO {
     boolean updateLocation(LocationOrganization location) throws DAOException;
     boolean registerLocation(LocationOrganization newLocation) throws DAOException;
-    
+    boolean deleteLocation(String country, String state) throws DAOException;
 }

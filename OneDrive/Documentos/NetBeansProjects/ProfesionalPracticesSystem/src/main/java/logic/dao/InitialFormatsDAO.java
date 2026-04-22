@@ -3,15 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package logic.dao;
-
-import dataacces.ConfigDatabase;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+/*
+@(#)InitialFormatsDAO.java 1.0 04/04/2026
+Copyright (c) 2026 JhonatanYerayLIS
+*/
 
 
 import java.sql.Connection;
@@ -21,8 +16,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import dataacces.ConnectionDatabase;
 import logic.businessObject.InitialFormats;
 import logic.businessObject.Student;
+import logic.exceptions.DAOException;
+import logic.idao.IInitialFormatsDAO;
 
 /**
  *
@@ -32,63 +30,62 @@ import logic.businessObject.Student;
 public class InitialFormatsDAO implements IInitialFormatsDAO{
 
     @Override
-    public boolean registerInitialFormats(InitialFormats initialFormats) throws SQLException {
+    public boolean registerInitialFormats(InitialFormats initialFormats) throws DAOException {
         String sql = "INSERT INTO formatosiniciales (tipoDocumentos, URL, matricula) VALUES (?, ?, ?)";
-        
-        try (Connection conn = ConfigDatabase.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        boolean registered = false;
+        try (Connection connection = ConnectionDatabase.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setString(1, initialFormats.getTypeOfDocument());
+            preparedStatement.setString(2, initialFormats.getUrl());
+            preparedStatement.setString(3, initialFormats.getStudent().getMatricula());
             
-            pstmt.setString(1, initialFormats.getTypeOfDocument());
-            pstmt.setString(2, initialFormats.getUrl());
-            pstmt.setString(3, initialFormats.getStudent().getMatricula());
-            
-            int rows = pstmt.executeUpdate();
+            int rows = preparedStatement.executeUpdate();
             
             if (rows > 0) {
-                ResultSet generatedKeys = pstmt.getGeneratedKeys();
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     initialFormats.setId(generatedKeys.getInt(1));
                 }
                 System.out.println("Formato inicial registrado correctamente");
-                return true;
+                registered = true;
             }
             
         } catch (SQLException e) {
-            System.err.println("Error al registrar formato: " + e.getMessage());
+            throw new DAOException("Error al registrar formato", e);
         }
-        return false;
+        return registered;
     }
 
     @Override
-    public List<InitialFormats> getByStudentMatricula(String matricula) throws SQLException {
+    public List<InitialFormats> getByStudentMatricula(String matricula) throws DAOException {
     List<InitialFormats> initialFormats = new ArrayList<>();
     
-    String sql = "SELECT f.*, s.nombre as student_name, s.email as student_email " +  // ← Espacio al final
+    String sql = "SELECT f.*, s.nombre as student_name, s.email as student_email " +
                  "FROM formatosiniciales f " +
                  "LEFT JOIN students s ON f.matricula = s.matricula " +
                  "WHERE f.matricula = ? " +
                  "ORDER BY f.idDocumentos";
     
-    try (Connection conn = ConfigDatabase.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql);
-         ResultSet rs = pstmt.executeQuery()) {  // ← Todo en un solo try
+    try (Connection connection = ConnectionDatabase.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+         ResultSet resultSet = preparedStatement.executeQuery()) {
+
+        preparedStatement.setString(1, matricula);
         
-        pstmt.setString(1, matricula);
-        
-        while (rs.next()) {
-            initialFormats.add(mapResultSetToInitialFormats(rs));
+        while (resultSet.next()) {
+            initialFormats.add(mapResultSetToInitialFormats(resultSet));
         }
         
     } catch (SQLException e) {
-        System.err.println("Error al obtener formatos por matricula: " + e.getMessage());
-        throw e;
+        throw new DAOException("Error al obtener formatos por matricula", e);
     }
     
     return initialFormats;
 }
 
     @Override
-    public List<InitialFormats> getByTypeOfDocument(String typeOfDocument) throws SQLException {
+    public List<InitialFormats> getByTypeOfDocument(String typeOfDocument) throws DAOException {
         List<InitialFormats> formats = new ArrayList<>();
         String sql = "SELECT f.*, s.nombre as student_name, s.email as student_email " +
                      "FROM formatosiniciales f " +
@@ -96,18 +93,18 @@ public class InitialFormatsDAO implements IInitialFormatsDAO{
                      "WHERE f.tipoDocumentos = ? " +
                      "ORDER BY f.idDocumentos";
         
-        try (Connection conn = ConfigDatabase.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = ConnectionDatabase.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, typeOfDocument);
+            ResultSet resultSet = preparedStatement.executeQuery();
             
-            pstmt.setString(1, typeOfDocument);
-            ResultSet rs = pstmt.executeQuery();
-            
-            while (rs.next()) {
-                formats.add(mapResultSetToInitialFormats(rs));
+            while (resultSet.next()) {
+                formats.add(mapResultSetToInitialFormats(resultSet));
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error: " + e.getMessage());
+            throw new DAOException("Error de obtencion de los tipos de documentos", e);
         }
         return formats;
     }

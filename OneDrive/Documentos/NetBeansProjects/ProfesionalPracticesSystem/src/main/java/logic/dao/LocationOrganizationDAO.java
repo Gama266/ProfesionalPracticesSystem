@@ -64,4 +64,21 @@ public class LocationOrganizationDAO implements ILocationOrganizationDAO {
             throw new DAOException("Error al actualizar", exceptionDB);
         }
     }
+    
+    @Override
+    public boolean deleteLocation(String country, String state) throws DAOException {
+        String query = "DELETE FROM ubicacion WHERE pais = ? AND estado = ?";
+
+        try {
+            Connection connection = ConfigDatabase.getConnection();
+            try (PreparedStatement statementDelete = connection.prepareStatement(query)) {
+                statementDelete.setString(1, country);
+                statementDelete.setString(2, state);
+                int rowsAffected = statementDelete.executeUpdate();
+                return rowsAffected > 0;
+            }
+        } catch (SQLException exceptionDB) {
+            throw new DAOException("Error eliminando la ubicacion de prueba", exceptionDB);
+        }
+    }
 }

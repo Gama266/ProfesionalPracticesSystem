@@ -4,16 +4,16 @@
  */
 package logic.idao;
 
-import logic.businessObject.Student;
+import logic.businessObject.TechnicalResponsible;
 import logic.exceptions.DAOException;
 
 /**
  *
  * @author gamal
  */
-public interface IStudentDAO {
-     boolean registerStudent(Student newStudent) throws DAOException;
-    boolean updateStudent(Student student) throws DAOException;
-   boolean deleteStudent(String matricula) throws DAOException;
-   
+public interface ITechnicalResponsibleDAO {
+    boolean registerTechnicalResponsible(TechnicalResponsible newResponsible) throws DAOException;
+
+    boolean updateTechnicalResponsible(TechnicalResponsible responsible) throws DAOException;
+    
 }

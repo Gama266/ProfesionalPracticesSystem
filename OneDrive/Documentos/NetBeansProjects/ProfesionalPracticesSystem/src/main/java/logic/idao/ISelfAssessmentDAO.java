@@ -8,7 +8,6 @@ package logic.idao;
  *
  * @author gamal
  */
-public interface ITechnicalResponsableDAO {
-    
+public interface ISelfAssessmentDAO {
     
 }

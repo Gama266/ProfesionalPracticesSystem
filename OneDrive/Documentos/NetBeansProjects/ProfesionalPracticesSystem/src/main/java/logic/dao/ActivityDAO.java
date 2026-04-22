@@ -2,10 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+/*
+@(#)ActividadDAO.java 1.0 04/04/2026
+Copyright (c) 2026 JhonatanYerayLIS
+*/
 package logic.dao;
 
-
-import dataacces.ConfigDatabase;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,16 +15,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import dataacces.ConnectionDatabase;
 import logic.businessObject.Activity;
 import logic.businessObject.Student;
+import logic.exceptions.DAOException;
+import logic.idao.IActivityDAO;
 
 /**
  *
@@ -32,130 +29,126 @@ import logic.businessObject.Student;
 public class ActivityDAO implements IActivityDAO{
 
     @Override
-    public boolean registerActivity(Activity activity) throws SQLException {
-      String sql = "INSERT INTO actividad (fecha, fecha, descripcion, matricula) VALUES (?, ?, ?,?)";
+    public boolean registerActivity(Activity activity) throws DAOException {
+      String sql = "INSERT INTO actividad (fecha, horas, descripcion, matricula) VALUES (?, ?, ?,?)";
         
-        try (Connection conn = ConfigDatabase.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            java.sql.Date fechaSQL = java.sql.Date.valueOf(activity.getDate());
-            pstmt.setDate(1,fechaSQL);
-            pstmt.setDouble(2, activity.getHours());
-            pstmt.setString(3, activity.getDescription());
-            pstmt.setString(4, activity.getStudent().getMatricula());
+        try (Connection connection = ConnectionDatabase.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            java.sql.Date dateSQL = java.sql.Date.valueOf(activity.getDate());
+            preparedStatement.setDate(1,dateSQL);
+            preparedStatement.setDouble(2, activity.getHours());
+            preparedStatement.setString(3, activity.getDescription());
+            preparedStatement.setString(4, activity.getStudent().getMatricula());
             
-            int rows = pstmt.executeUpdate();
+            int rows = preparedStatement.executeUpdate();
             System.out.println("Registro de Actividad correctamente");
             return rows > 0;
             
         } catch (SQLException e) {
-            System.err.println("Error al registrar: " + e.getMessage());
-            return false;
-        }  
+            throw  new DAOException("Error de registro", e);
+        }
     }
 
     @Override
-    public List<Activity> getAll() throws SQLException {
+    public List<Activity> getAll() throws DAOException {
         List<Activity> activities = new ArrayList<>();
     String sql = "SELECT * FROM actividad ORDER BY fechaActividad DESC";
     
-    try (Connection conn = ConfigDatabase.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql);
-         ResultSet rs = pstmt.executeQuery()) {
+    try (Connection connection = ConnectionDatabase.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+         ResultSet resultSet = preparedStatement.executeQuery()) {
         
-        while (rs.next()) {
+        while (resultSet.next()) {
             Activity activity = new Activity();
             
-            activity.setId(rs.getInt("idActividad"));
+            activity.setId(resultSet.getInt("idActividad"));
             
-            activity.setDate(rs.getDate("fechaActividad").toLocalDate());
+            activity.setDate(resultSet.getDate("fechaActividad").toLocalDate());
             
-            activity.setHours(rs.getFloat("horas"));
+            activity.setHours(resultSet.getFloat("horas"));
             
-            activity.setDescription(rs.getString("descripcion"));
+            activity.setDescription(resultSet.getString("descripcion"));
             
             Student student = new Student();
-            student.setMatricula(rs.getString("matricula"));
+            student.setMatricula(resultSet.getString("matricula"));
             activity.setStudent(student);
             
             activities.add(activity);
         }
         
     } catch (SQLException e) {
-        System.err.println("Error al obtener actividades: " + e.getMessage());
-        throw e;
+        throw  new DAOException("Error al obtener las actividades", e);
     }
-    
     return activities;
     }
 
     @Override
-    public List<Activity> getByDateRange(LocalDate startDate, LocalDate endDate) throws SQLException {
+    public List<Activity> getByDateRange(LocalDate startDate, LocalDate endDate) throws DAOException {
          List<Activity> activities = new ArrayList<>();
     String sql = "SELECT * FROM actividad WHERE fechaActividad BETWEEN ? AND ? ORDER BY fechaActividad";
     
-    try (Connection conn = ConfigDatabase.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    try (Connection connection = ConnectionDatabase.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+        preparedStatement.setDate(1, java.sql.Date.valueOf(startDate));
+        preparedStatement.setDate(2, java.sql.Date.valueOf(endDate));
         
-        pstmt.setDate(1, java.sql.Date.valueOf(startDate));
-        pstmt.setDate(2, java.sql.Date.valueOf(endDate));
+        ResultSet resultSet = preparedStatement.executeQuery();
         
-        ResultSet rs = pstmt.executeQuery();
-        
-        while (rs.next()) {
+        while (resultSet.next()) {
             Activity activity = new Activity();
-            activity.setId(rs.getInt("idActividad"));
-            activity.setDate(rs.getDate("fechaActividad").toLocalDate());
-            activity.setHours(rs.getFloat("horas"));
-            activity.setDescription(rs.getString("descripcion"));
+            activity.setId(resultSet.getInt("idActividad"));
+            activity.setDate(resultSet.getDate("fechaActividad").toLocalDate());
+            activity.setHours(resultSet.getFloat("horas"));
+            activity.setDescription(resultSet.getString("descripcion"));
             
             Student student = new Student();
-            student.setMatricula(rs.getString("matricula"));
+            student.setMatricula(resultSet.getString("matricula"));
             activity.setStudent(student);
             
             activities.add(activity);
         }
         
     } catch (SQLException e) {
-        System.err.println("Error: " + e.getMessage());
-        throw e;
+        throw new DAOException("Error al obtener las actividades por rango de fecha", e);
+
     }
     
     return activities;
     }
 
     @Override
-    public List<Activity> getByStudentAndDateRange(int studentId, LocalDate startDate, 
-            LocalDate endDate) throws SQLException {
+    public List<Activity> getByStudentAndDateRange(String matricula, LocalDate startDate,
+            LocalDate endDate) throws DAOException {
         List<Activity> activities = new ArrayList<>();
     String sql = "SELECT * FROM actividad WHERE matricula = ? "
             + "AND fechaActividad BETWEEN ? AND ? ORDER BY fechaActividad";
     
-    try (Connection conn = ConfigDatabase.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    try (Connection connection = ConnectionDatabase.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+        preparedStatement.setString(1, String.valueOf(matricula));
+        preparedStatement.setDate(2, java.sql.Date.valueOf(startDate));
+        preparedStatement.setDate(3, java.sql.Date.valueOf(endDate));
+
+        ResultSet resultSet = preparedStatement.executeQuery();
         
-        pstmt.setString(1, String.valueOf(studentId)); 
-        pstmt.setDate(2, java.sql.Date.valueOf(startDate));
-        pstmt.setDate(3, java.sql.Date.valueOf(endDate));
-        
-        ResultSet rs = pstmt.executeQuery();
-        
-        while (rs.next()) {
+        while (resultSet.next()) {
             Activity activity = new Activity();
-            activity.setId(rs.getInt("idActividad"));
-            activity.setDate(rs.getDate("fechaActividad").toLocalDate());
-            activity.setHours(rs.getFloat("horas"));
-            activity.setDescription(rs.getString("descripcion"));
+            activity.setId(resultSet.getInt("idActividad"));
+            activity.setDate(resultSet.getDate("fechaActividad").toLocalDate());
+            activity.setHours(resultSet.getFloat("horas"));
+            activity.setDescription(resultSet.getString("descripcion"));
             
             Student student = new Student();
-            student.setMatricula(rs.getString("matricula"));
+            student.setMatricula(resultSet.getString("matricula"));
             activity.setStudent(student);
             
             activities.add(activity);
         }
         
     } catch (SQLException e) {
-        System.err.println("Error al obtener actividades: " + e.getMessage());
-        throw e;
+        throw new DAOException("Error al obtener los actividades de estudiante por fecha", e);
     }
     
     return activities;
