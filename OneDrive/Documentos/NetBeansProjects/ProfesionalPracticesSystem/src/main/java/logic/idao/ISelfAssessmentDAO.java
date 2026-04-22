@@ -4,10 +4,20 @@
  */
 package logic.idao;
 
+
+import java.util.List;
+
+import logic.businessObject.SelfAssessment;
+import logic.exceptions.DAOException;
+
 /**
  *
- * @author gamal
+ * @author Jhonatan Yeray Hernadez Rivera
+ * @version1.0
  */
 public interface ISelfAssessmentDAO {
-    
+    public boolean registerSelfAssessment(SelfAssessment selfAssessment) throws DAOException;
+
+    public List<SelfAssessment> getAllSelfAssessments() throws DAOException;
+
 }

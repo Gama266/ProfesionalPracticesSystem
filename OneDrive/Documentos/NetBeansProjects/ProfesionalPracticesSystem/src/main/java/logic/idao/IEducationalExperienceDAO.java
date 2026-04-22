@@ -4,14 +4,19 @@
  */
 package logic.idao;
 
+
 import java.time.LocalDate;
 import java.util.List;
 import logic.businessObject.EducationalExperience;
 import logic.exceptions.DAOException;
 
-
+/**
+ *
+ * @author Jhonatan Yeray Hernadez Rivera
+ * @version1.0
+ */
 public interface IEducationalExperienceDAO {
-       boolean registerEducationalExperience(EducationalExperience experience)throws DAOException;
+   boolean registerEducationalExperience(EducationalExperience experience)throws DAOException;
    
    List<EducationalExperience> getByDateRange(LocalDate startDate, LocalDate endDate)
            throws DAOException;

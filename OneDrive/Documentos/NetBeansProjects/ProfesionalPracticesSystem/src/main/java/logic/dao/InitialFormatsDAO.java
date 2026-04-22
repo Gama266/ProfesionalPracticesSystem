@@ -21,14 +21,14 @@ import logic.businessObject.InitialFormats;
 import logic.businessObject.Student;
 import logic.exceptions.DAOException;
 import logic.idao.IInitialFormatsDAO;
-
+import java.util.logging.Logger;
 /**
  *
  * @author Jhonatan Yeray Hernadez Rivera
  * @version1.0
  */
 public class InitialFormatsDAO implements IInitialFormatsDAO{
-
+    private static final Logger logger = Logger.getLogger(InitialFormatsDAO.class.getName());
     @Override
     public boolean registerInitialFormats(InitialFormats initialFormats) throws DAOException {
         String sql = "INSERT INTO formatosiniciales (tipoDocumentos, URL, matricula) VALUES (?, ?, ?)";
@@ -43,11 +43,12 @@ public class InitialFormatsDAO implements IInitialFormatsDAO{
             int rows = preparedStatement.executeUpdate();
             
             if (rows > 0) {
-                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    initialFormats.setId(generatedKeys.getInt(1));
+                try(ResultSet generatedKeys = preparedStatement.getGeneratedKeys()){
+                    if (generatedKeys.next()) {
+                        initialFormats.setId(generatedKeys.getInt(1));
+                    }
                 }
-                System.out.println("Formato inicial registrado correctamente");
+                logger.info("Formato inicial registrado correctamente");
                 registered = true;
             }
             
@@ -68,13 +69,14 @@ public class InitialFormatsDAO implements IInitialFormatsDAO{
                  "ORDER BY f.idDocumentos";
     
     try (Connection connection = ConnectionDatabase.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-         ResultSet resultSet = preparedStatement.executeQuery()) {
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 
-        preparedStatement.setString(1, matricula);
-        
-        while (resultSet.next()) {
-            initialFormats.add(mapResultSetToInitialFormats(resultSet));
+         preparedStatement.setString(1, matricula);
+
+        try(ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                initialFormats.add(mapResultSetToInitialFormats(resultSet));
+            }
         }
         
     } catch (SQLException e) {
@@ -97,10 +99,12 @@ public class InitialFormatsDAO implements IInitialFormatsDAO{
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, typeOfDocument);
-            ResultSet resultSet = preparedStatement.executeQuery();
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
             
-            while (resultSet.next()) {
-                formats.add(mapResultSetToInitialFormats(resultSet));
+                while (resultSet.next()) {
+                    formats.add(mapResultSetToInitialFormats(resultSet));
+                }
             }
             
         } catch (SQLException e) {
@@ -108,24 +112,22 @@ public class InitialFormatsDAO implements IInitialFormatsDAO{
         }
         return formats;
     }
-    private InitialFormats mapResultSetToInitialFormats(ResultSet rs) throws SQLException {
+    private InitialFormats mapResultSetToInitialFormats(ResultSet resultSet) throws SQLException {
         InitialFormats format = new InitialFormats();
-        format.setId(rs.getInt("idDocumentos"));
-        format.setTypeOfDocument(rs.getString("tipoDocumentos"));
-        format.setUrl(rs.getString("URL"));
+        format.setId(resultSet.getInt("idDocumentos"));
+        format.setTypeOfDocument(resultSet.getString("tipoDocumentos"));
+        format.setUrl(resultSet.getString("URL"));
         
         Student student = new Student();
-        student.setMatricula(rs.getString("matricula"));
+        student.setMatricula(resultSet.getString("matricula"));
         
 
-        try {
-            String studentName = rs.getString("student_name");
-            if (studentName != null) {
-                student.setName(studentName);
-            }
-        } catch (SQLException e) {
+
+        String studentName = resultSet.getString("student_name");
+        if (studentName != null) {
+            student.setName(studentName);
         }
-        
+
         format.setStudent(student);
         return format;
     }

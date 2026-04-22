@@ -4,16 +4,21 @@
  */
 package logic.idao;
 
+
 import java.util.List;
 import logic.businessObject.InitialFormats;
 import logic.exceptions.DAOException;
 
+
 /**
  *
- * @author gamal
+ * @author Jhonatan Yeray Hernadez Rivera
+ * @version1.0
  */
 public interface IInitialFormatsDAO {
-      boolean registerInitialFormats(InitialFormats initialFormats) throws DAOException;
+    boolean registerInitialFormats(InitialFormats initialFormats) throws DAOException;
+     
     List<InitialFormats> getByStudentMatricula(String matricula)throws DAOException;
+      
     List<InitialFormats> getByTypeOfDocument(String typeOfDocument)throws DAOException;
 }

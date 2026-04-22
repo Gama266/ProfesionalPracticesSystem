@@ -4,69 +4,76 @@
  */
 package logic.dao;
 
-
-import dataacces.ConfigDatabase;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import dataacces.ConnectionDatabase;
+import logic.businessObject.SelfAssessment;
+import logic.businessObject.Student;
+import logic.exceptions.DAOException;
 import logic.idao.ISelfAssessmentDAO;
-
-
+import java.util.logging.Logger;
 /**
  *
  * @author Jhonatan Yeray Hernadez Rivera
  * @version1.0
  */
 public class SelfAssessmentDAO implements ISelfAssessmentDAO {
-/*
+    private static final Logger logger = Logger.getLogger(SelfAssessmentDAO.class.getName());
     @Override
-    public boolean registerSelfAssessment(SelfAssessment selfAssessment) throws SQLException {
+    public boolean registerSelfAssessment(SelfAssessment selfAssessment) throws DAOException {
     String sql = "INSERT INTO autoevaluacion (url, calificacion, matricula) VALUES (?, ?, ?)";
         
-        try (Connection conn = ConfigDatabase.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = ConnectionDatabase.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, selfAssessment.getUrl());
+            preparedStatement.setDouble(2, selfAssessment.getGrade());
+            preparedStatement.setString(3, selfAssessment.getStudent().getMatricula());
             
-            pstmt.setString(1, selfAssessment.getUrl());
-            pstmt.setDouble(2, selfAssessment.getGrade());
-            pstmt.setString(3, selfAssessment.getStudent().getMatricula());
-            
-            int rows = pstmt.executeUpdate();
-            System.out.println("Autoevaluación insertada correctamente");
+            int rows = preparedStatement.executeUpdate();
+            logger.info("Autoevaluación insertada correctamente");
             return rows > 0;
             
         } catch (SQLException e) {
-            System.err.println("Error al insertar: " + e.getMessage());
-            return false;
+            throw new DAOException("Error al registrar", e);
         }
     }
-    
-    public void showSelfAssessments()throws SQLException{
-         String sql = "SELECT * FROM autoevaluacion";
-    
-    try (Connection conn = ConfigDatabase.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql);
-         ResultSet rs = pstmt.executeQuery(sql)) {
-        
-        System.out.println("\n=== AUTOEVALUACIONES ===");
-        
-        boolean hayRegistros = false;
-        
-        while (rs.next()) {
-            hayRegistros = true;
-            System.out.println("ID: " + rs.getInt("id"));
-            System.out.println("URL: " + rs.getString("url"));
-            System.out.println("Calificacion: " + rs.getDouble("grade"));
-            System.out.println("Matricula Estudiante: " + rs.getString("student_matricula"));
-            System.out.println("--------------------");
+
+    @Override
+    public List<SelfAssessment> getAllSelfAssessments() throws DAOException {
+        List<SelfAssessment> assessments = new ArrayList<>();
+        String sql = "SELECT * FROM autoevaluacion";
+
+        try (Connection connection = ConnectionDatabase.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                assessments.add(mapResultSetToSelfAssessment(resultSet));
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener autoevaluaciones", e);
         }
-        
-        if (!hayRegistros) {
-            System.out.println("No hay autoevaluaciones registradas.");
-        }
-        
-    } catch (SQLException e) {
-        System.err.println("Error al mostrar: " + e.getMessage());
+
+        return assessments;
     }
-    }*/
+
+    private SelfAssessment mapResultSetToSelfAssessment(ResultSet resultSet) throws SQLException {
+        SelfAssessment assessment = new SelfAssessment();
+        assessment.setId(resultSet.getInt("id"));
+        assessment.setUrl(resultSet.getString("url"));
+        assessment.setGrade(resultSet.getDouble("calificacion"));
+
+        Student student = new Student();
+        student.setMatricula(resultSet.getString("matricula"));
+        assessment.setStudent(student);
+
+        return assessment;
+    }
 }

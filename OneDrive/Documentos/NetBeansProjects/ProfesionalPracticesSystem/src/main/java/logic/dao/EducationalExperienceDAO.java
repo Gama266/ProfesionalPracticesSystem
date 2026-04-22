@@ -19,7 +19,7 @@ import dataacces.ConnectionDatabase;
 import logic.businessObject.EducationalExperience;
 import logic.exceptions.DAOException;
 import logic.idao.IEducationalExperienceDAO;
-
+import java.util.logging.Logger;
 /**
  *
  * @author Jhonatan Yeray Hernadez Rivera
@@ -27,6 +27,7 @@ import logic.idao.IEducationalExperienceDAO;
  */
 public class EducationalExperienceDAO implements IEducationalExperienceDAO{
 
+    private static final Logger logger = Logger.getLogger(EducationalExperienceDAO.class.getName());
     @Override
     public boolean registerEducationalExperience(EducationalExperience experience) 
             throws DAOException {
@@ -42,7 +43,7 @@ public class EducationalExperienceDAO implements IEducationalExperienceDAO{
             preparedStatement.setString(4, experience.getSeccion());
             
             int rows = preparedStatement.executeUpdate();
-            System.out.println("Experiencia Educativa registrada correctamente");
+            logger.info("Experiencia Educativa registrada correctamente");
             return rows > 0;
             
         } catch (SQLException e) {
@@ -62,10 +63,11 @@ public class EducationalExperienceDAO implements IEducationalExperienceDAO{
 
         preparedStatement.setDate(1, java.sql.Date.valueOf(startDate));
         preparedStatement.setDate(2, java.sql.Date.valueOf(endDate));
-        ResultSet resultSet = preparedStatement.executeQuery();
-        
-        while (resultSet.next()) {
-            experiences.add(mapResultSetToEducationalExperience(resultSet));
+
+        try(ResultSet resultSet = preparedStatement.executeQuery()){
+            while (resultSet.next()) {
+                experiences.add(mapResultSetToEducationalExperience(resultSet));
+            }
         }
         
     } catch (SQLException e) {
@@ -84,5 +86,4 @@ public class EducationalExperienceDAO implements IEducationalExperienceDAO{
         experience.setSeccion(resultSet.getString("seccion"));
         return experience;
     }
-
 }

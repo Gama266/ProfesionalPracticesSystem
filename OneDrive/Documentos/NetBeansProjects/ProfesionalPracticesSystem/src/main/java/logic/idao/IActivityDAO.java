@@ -4,17 +4,20 @@
  */
 package logic.idao;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import logic.businessObject.Activity;
 import logic.exceptions.DAOException;
 
+
 /**
  *
- * @author yeray
+ * @author Jhonatan Yeray Hernadez Rivera
+ * @version1.0
  */
 public interface IActivityDAO {
-       boolean registerActivity(Activity activity) throws DAOException;
+    boolean registerActivity(Activity activity) throws DAOException;
     
     List<Activity> getAll()throws DAOException;
     

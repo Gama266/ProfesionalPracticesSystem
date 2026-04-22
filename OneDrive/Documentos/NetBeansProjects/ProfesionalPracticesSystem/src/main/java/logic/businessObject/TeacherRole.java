@@ -8,12 +8,12 @@ package logic.businessObject;
  *
  * @author gamal
  */
-public class TeacherRool {
+public class TeacherRole {
     
     public int id;
     public String type;
 
-    public TeacherRool() {
+    public TeacherRole() {
     }
 
     public int getId() {

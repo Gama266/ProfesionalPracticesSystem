@@ -6,6 +6,10 @@
 @(#)ActividadDAO.java 1.0 04/04/2026
 Copyright (c) 2026 JhonatanYerayLIS
 */
+/*
+@(#)ActividadDAO.java 1.0 04/04/2026
+Copyright (c) 2026 JhonatanYerayLIS
+*/
 package logic.dao;
 
 import java.sql.Connection;
@@ -20,6 +24,7 @@ import logic.businessObject.Activity;
 import logic.businessObject.Student;
 import logic.exceptions.DAOException;
 import logic.idao.IActivityDAO;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,9 +33,11 @@ import logic.idao.IActivityDAO;
  */
 public class ActivityDAO implements IActivityDAO{
 
+    private static final Logger logger = Logger.getLogger(ActivityDAO.class.getName());
+
     @Override
     public boolean registerActivity(Activity activity) throws DAOException {
-      String sql = "INSERT INTO actividad (fecha, horas, descripcion, matricula) VALUES (?, ?, ?,?)";
+      String sql = "INSERT INTO actividad (fechaActividad, horas, descripcion, matricula) VALUES (?, ?, ?,?)";
         
         try (Connection connection = ConnectionDatabase.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -41,7 +48,7 @@ public class ActivityDAO implements IActivityDAO{
             preparedStatement.setString(4, activity.getStudent().getMatricula());
             
             int rows = preparedStatement.executeUpdate();
-            System.out.println("Registro de Actividad correctamente");
+            logger.info("Registro de Actividad correctamente");
             return rows > 0;
             
         } catch (SQLException e) {
@@ -52,34 +59,20 @@ public class ActivityDAO implements IActivityDAO{
     @Override
     public List<Activity> getAll() throws DAOException {
         List<Activity> activities = new ArrayList<>();
-    String sql = "SELECT * FROM actividad ORDER BY fechaActividad DESC";
+        String sql = "SELECT * FROM actividad ORDER BY fechaActividad DESC";
     
-    try (Connection connection = ConnectionDatabase.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-         ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Connection connection = ConnectionDatabase.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
         
-        while (resultSet.next()) {
-            Activity activity = new Activity();
-            
-            activity.setId(resultSet.getInt("idActividad"));
-            
-            activity.setDate(resultSet.getDate("fechaActividad").toLocalDate());
-            
-            activity.setHours(resultSet.getFloat("horas"));
-            
-            activity.setDescription(resultSet.getString("descripcion"));
-            
-            Student student = new Student();
-            student.setMatricula(resultSet.getString("matricula"));
-            activity.setStudent(student);
-            
-            activities.add(activity);
+            while (resultSet.next()) {
+                activities.add(mapResultSetToActivity(resultSet));
+            }
+        
+        } catch (SQLException e) {
+            throw  new DAOException("Error al obtener las actividades", e);
         }
-        
-    } catch (SQLException e) {
-        throw  new DAOException("Error al obtener las actividades", e);
-    }
-    return activities;
+        return activities;
     }
 
     @Override
@@ -93,20 +86,11 @@ public class ActivityDAO implements IActivityDAO{
         preparedStatement.setDate(1, java.sql.Date.valueOf(startDate));
         preparedStatement.setDate(2, java.sql.Date.valueOf(endDate));
         
-        ResultSet resultSet = preparedStatement.executeQuery();
+        try(ResultSet resultSet = preparedStatement.executeQuery()) {
         
-        while (resultSet.next()) {
-            Activity activity = new Activity();
-            activity.setId(resultSet.getInt("idActividad"));
-            activity.setDate(resultSet.getDate("fechaActividad").toLocalDate());
-            activity.setHours(resultSet.getFloat("horas"));
-            activity.setDescription(resultSet.getString("descripcion"));
-            
-            Student student = new Student();
-            student.setMatricula(resultSet.getString("matricula"));
-            activity.setStudent(student);
-            
-            activities.add(activity);
+            while (resultSet.next()) {
+                activities.add(mapResultSetToActivity(resultSet));
+            }
         }
         
     } catch (SQLException e) {
@@ -127,31 +111,35 @@ public class ActivityDAO implements IActivityDAO{
     try (Connection connection = ConnectionDatabase.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-        preparedStatement.setString(1, String.valueOf(matricula));
+        preparedStatement.setString(1, (matricula));
         preparedStatement.setDate(2, java.sql.Date.valueOf(startDate));
         preparedStatement.setDate(3, java.sql.Date.valueOf(endDate));
 
-        ResultSet resultSet = preparedStatement.executeQuery();
-        
-        while (resultSet.next()) {
-            Activity activity = new Activity();
-            activity.setId(resultSet.getInt("idActividad"));
-            activity.setDate(resultSet.getDate("fechaActividad").toLocalDate());
-            activity.setHours(resultSet.getFloat("horas"));
-            activity.setDescription(resultSet.getString("descripcion"));
-            
-            Student student = new Student();
-            student.setMatricula(resultSet.getString("matricula"));
-            activity.setStudent(student);
-            
-            activities.add(activity);
+        try(ResultSet resultSet = preparedStatement.executeQuery()){
+            while (resultSet.next()) {
+                activities.add(mapResultSetToActivity(resultSet));
+            }
         }
         
-    } catch (SQLException e) {
-        throw new DAOException("Error al obtener los actividades de estudiante por fecha", e);
-    }
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener los actividades de estudiante por fecha", e);
+        }
     
-    return activities;
+        return activities;
+    }
+
+    private Activity mapResultSetToActivity(ResultSet resultSet) throws SQLException {
+        Activity activity = new Activity();
+        activity.setId(resultSet.getInt("idActividad"));
+        activity.setDate(resultSet.getDate("fechaActividad").toLocalDate());
+        activity.setHours(resultSet.getFloat("horas"));
+        activity.setDescription(resultSet.getString("descripcion"));
+
+        Student student = new Student();
+        student.setMatricula(resultSet.getString("matricula"));
+        activity.setStudent(student);
+
+        return activity;
     }
     
 }

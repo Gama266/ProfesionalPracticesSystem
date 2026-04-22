@@ -3,88 +3,90 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package logic.dao;
-import dataacces.ConfigDatabase;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import dataacces.ConnectionDatabase;
 import logic.businessObject.LinkedOrganization;
 import logic.businessObject.LocationOrganization;
 import logic.exceptions.DAOException;
 import logic.idao.ILinkedOrganizationDAO;
-
+import java.util.logging.Logger;
 /**
  *
  * @author Jhonatan Yeray Hernadez Rivera
  * @version1.0
  */
 public class LinkedOrganizationDAO implements ILinkedOrganizationDAO{
-
+    private static final Logger logger = Logger.getLogger(LinkedOrganizationDAO.class.getName());
     @Override
-    public boolean registerLinkedOrganization(LinkedOrganization org) throws DAOException {
-       
-        String query = "INSERT INTO organizacionvinculada (nombreOrganizacion, direccion, numeroTelefono, correoElectronico, idUbicacion) " +
-                       "VALUES (?, ?, ?, ?, ?)";
+    public boolean registerLinkedOrganization(LinkedOrganization linkedOrganization) throws DAOException {
+       String sql = "INSERT INTO organizaciónvinculada (nombreOrganizacion, direccion, numeroTelefono, correoElectronico," +
+               " idUbicacion) VALUES (?, ?, ?, ?, ?)";
+        boolean registerd = false;
 
-        try {
-            Connection connection = ConfigDatabase.getConnection();
+        try (Connection connection = ConnectionDatabase.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            try (PreparedStatement statementRegister = connection.prepareStatement(query)) {
-
-                statementRegister.setString(1, org.getName());
-                statementRegister.setString(2, org.getDireccion());
-                statementRegister.setString(3, org.getPhoneNumber());
-                statementRegister.setString(4, org.getGmail());
-
-         
-                if (org.getLocationOrganization() != null) {
-                    statementRegister.setInt(5, org.getLocationOrganization().getId());
-                } else {
-                   
-                    statementRegister.setNull(5, java.sql.Types.INTEGER);
-                }
-
+            preparedStatement.setString(1, linkedOrganization.getName());
+            preparedStatement.setString(2, linkedOrganization.getDireccion());
+            preparedStatement.setString(3, linkedOrganization.getPhoneNumber());
+            preparedStatement.setString(4, linkedOrganization.getGmail());
+            preparedStatement.setInt(5, linkedOrganization.getLocationOrganization().getId());
             
-                int rowsAffected = statementRegister.executeUpdate();
-                return rowsAffected > 0;
+            int rows = preparedStatement.executeUpdate();
+            
+            if (rows > 0) {
+                try(ResultSet generatedKeys = preparedStatement.getGeneratedKeys()){
+                    if (generatedKeys.next()) {
+                        linkedOrganization.setId(generatedKeys.getInt(1));
+                    }
+                }
+                logger.info("Organización vinculada registrada correctamente");
+                registerd = true;
             }
-        } catch (SQLException exceptionDB) {
-           
-            throw new DAOException("Error registrando la organización vinculada", exceptionDB);
+            
+        } catch (SQLException e) {
+            throw new DAOException("Error al registrar organizacion ",e);
         }
+        return registerd;
     }
-    
+
+
     @Override
-    public boolean deleteLinkedOrganization(String nombre) throws DAOException {
-        String query = "DELETE FROM organizacionvinculada WHERE nombreOrganizacion = ?";
-
-        try {
-            Connection connection = ConfigDatabase.getConnection();
-
-            try (PreparedStatement statementDelete = connection.prepareStatement(query)) {
-                statementDelete.setString(1, nombre);
-                int rowsAffected = statementDelete.executeUpdate();
-                return rowsAffected > 0;
+    public List<LinkedOrganization> showAllLinkedOrganization() throws DAOException{
+        List<LinkedOrganization> organizations = new ArrayList<>();
+        String sql = "SELECT * FROM organizacionvinculada ORDER BY nombreOrganizacion";
+        
+        try (Connection connection = ConnectionDatabase.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            
+            while (resultSet.next()) {
+                organizations.add(mapResultSetToLinkedOrganization(resultSet));
             }
-
-        } catch (SQLException exceptionDB) {
-            throw new DAOException("Error eliminando la organización de prueba", exceptionDB);
+            
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener las organizaciones", e);
         }
+        return organizations;
     }
     
-    private LinkedOrganization mapResultSetToLinkedOrganization(ResultSet rs) throws SQLException {
+    private LinkedOrganization mapResultSetToLinkedOrganization(ResultSet resultSet) throws SQLException {
         LinkedOrganization organization = new LinkedOrganization();
-        organization.setId(rs.getInt("IdOrganizacionVinculada"));
-        organization.setName(rs.getString("nombreOrganizacion"));
-        organization.setDireccion(rs.getString("direccion"));
-        organization.setPhoneNumber(rs.getString("numeroTelefono"));
-        organization.setGmail(rs.getString("correoElectronico"));
-        
-        
+        organization.setId(resultSet.getInt("IdOrganizacionVinculada"));
+        organization.setName(resultSet.getString("nombreOrganizacion"));
+        organization.setDireccion(resultSet.getString("direccion"));
+        organization.setPhoneNumber(resultSet.getString("numeroTelefono"));
+        organization.setGmail(resultSet.getString("correoElectronico"));
+
         LocationOrganization location = new LocationOrganization();
-        location.setId(rs.getInt("idUbicacion"));
+        location.setId(resultSet.getInt("idUbicacion"));
         organization.setLocationOrganization(location);
         
         return organization;

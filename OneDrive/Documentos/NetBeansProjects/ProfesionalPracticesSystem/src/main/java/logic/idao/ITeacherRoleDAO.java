@@ -4,13 +4,15 @@
  */
 package logic.idao;
 
-import logic.businessObject.TeacherRool;
+import logic.businessObject.TeacherRole;
 import logic.exceptions.DAOException;
 
 /**
  *
- * @author Yeray
+ * @author Jhonatan Yeray Hernadez Rivera
+ * @version1.0
  */
-public interface ITeacherRoolDAO {
-     public boolean registerSelfTeacherRool(TeacherRool teacherRool) throws DAOException;
+public interface ITeacherRoleDAO {
+    public boolean registerTeacherRole(TeacherRole teacherRole) throws DAOException;
+        
 }
