@@ -15,7 +15,7 @@ public class EducationalExperience {
     private int nrc;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String seccion;
+    private String section;
 
     public EducationalExperience() {
     }
@@ -44,12 +44,12 @@ public class EducationalExperience {
         this.endDate = endDate;
     }
 
-    public String getSeccion() {
-        return seccion;
+    public String getSection() {
+        return section;
     }
 
-    public void setSeccion(String seccion) {
-        this.seccion = seccion;
+    public void setSection(String seccion) {
+        this.section = seccion;
     }
     
     

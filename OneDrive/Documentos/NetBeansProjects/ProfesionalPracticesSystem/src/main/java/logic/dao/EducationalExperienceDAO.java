@@ -40,12 +40,12 @@ public class EducationalExperienceDAO implements IEducationalExperienceDAO{
             preparedStatement.setInt(1, experience.getNrc());
             preparedStatement.setDate(2, java.sql.Date.valueOf(experience.getStartDate()));
             preparedStatement.setDate(3, java.sql.Date.valueOf(experience.getEndDate()));
-            preparedStatement.setString(4, experience.getSeccion());
+            preparedStatement.setString(4, experience.getSection());
             
             int rows = preparedStatement.executeUpdate();
             logger.info("Experiencia Educativa registrada correctamente");
             return rows > 0;
-            
+             
         } catch (SQLException e) {
             throw new DAOException("Error al registrar Experiencia Educativa", e);
 
@@ -83,7 +83,7 @@ public class EducationalExperienceDAO implements IEducationalExperienceDAO{
         experience.setNrc(resultSet.getInt("nrc"));
         experience.setStartDate(resultSet.getDate("fechaInicio").toLocalDate());
         experience.setEndDate(resultSet.getDate("fechaTermino").toLocalDate());
-        experience.setSeccion(resultSet.getString("seccion"));
+        experience.setSection(resultSet.getString("seccion"));
         return experience;
     }
 }
