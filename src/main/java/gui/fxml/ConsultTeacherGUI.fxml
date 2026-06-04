@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #f1f5f9; -fx-padding: 30;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ConsultTeacherGUIController">
+    <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10;">
+        <VBox>
+            <Label text="Gestión de Personal Académico"><font><Font name="System Bold" size="20.0" /></font></Label>
+            <Label text="Listado general de usuarios registrados." textFill="#64748b" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <TextField fx:id="txtSearchProfessor" prefHeight="35.0" prefWidth="250.0" promptText="Buscar por nombre o número..." />
+    </HBox>
+    <TableView fx:id="tableProfessors" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colPersonalNum" prefWidth="120.0" text="NO. PERSONAL" />
+            <TableColumn fx:id="colName" prefWidth="250.0" text="NOMBRE COMPLETO" />
+            <TableColumn fx:id="colRole" prefWidth="150.0" text="ROL" />
+            <TableColumn fx:id="colStatus" prefWidth="100.0" text="ESTADO" />
+            <TableColumn fx:id="colActions" prefWidth="120.0" text="ACCIONES" />
+        </columns>
+    </TableView>
+</VBox>

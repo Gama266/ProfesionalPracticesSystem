@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-padding: 30;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ConsultEducationalExperienceGUIController">
+    <Label text="Consultar Experiencia Educativa" style="-fx-background-color: #9ca3af; -fx-padding: 10 20; -fx-background-radius: 10;"><font><Font name="System Bold" size="18.0" /></font></Label>
+    <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+     
+        <VBox spacing="10.0" style="-fx-background-color: #9ca3af; -fx-padding: 20; -fx-background-radius: 15;" prefWidth="200.0">
+            <Label text="Experiencia Educativa" />
+            <Label text="NRC" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-background-color: white; -fx-background-radius: 10 10 0 0;"><font><Font name="System Bold" size="16.0" /></font></Label>
+            <ListView fx:id="listEE" VBox.vgrow="ALWAYS" style="-fx-background-radius: 0 0 10 10;"/>
+        </VBox>
+        
+        <VBox alignment="CENTER" spacing="10">
+            <Button text="Busqueda" style="-fx-background-color: #9ca3af;"/>
+            <HBox spacing="5" alignment="CENTER">
+                <TextField fx:id="txtSearchNRC" promptText="NRC" prefWidth="80"/>
+                <Button text="Buscar" style="-fx-background-color: #9ca3af;"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

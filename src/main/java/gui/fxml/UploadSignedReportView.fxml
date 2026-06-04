@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="400.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.UploadSignedReportController">
+
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="20" left="25" right="25" top="25" />
+            </padding>
+            <Label text="Entrega de Reporte Firmado" style="-fx-font-weight: bold;">
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Label>
+            <Label text="Seleccione el archivo PDF de su reporte para registrarlo en el sistema." style="-fx-text-fill: #64748b;" />
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20">
+            <padding>
+                <Insets left="25" right="25" />
+            </padding>
+
+            <VBox alignment="CENTER" spacing="15" style="-fx-border-color: #cbd5e1; -fx-border-style: dashed; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-color: #f8fafc;">
+                <padding>
+                    <Insets bottom="30" top="30" />
+                </padding>
+                
+                <Button onAction="#handleSelectFile" style="-fx-background-color: #ffffff; -fx-border-color: #94a3b8; -fx-border-radius: 5; -fx-cursor: hand;" text="Buscar Archivo PDF">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+
+                <Label fx:id="selectedFileLabel" text="Ningún archivo seleccionado" style="-fx-text-fill: #475569;">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+            <Label fx:id="fileErrorLabel" managed="false" style="-fx-text-fill: #ef4444; -fx-font-weight: bold;" text="Error" visible="false" />
+
+            <Label fx:id="resultLabel" managed="false" text="Resultado" visible="false" wrapText="true" />
+            
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="15">
+            <padding>
+                <Insets bottom="25" left="25" right="25" top="15" />
+            </padding>
+
+            <Button onAction="#handleClear" style="-fx-background-color: #64748b; -fx-text-fill: white; -fx-cursor: hand;" text="Limpiar" />
+
+            <Button onAction="#handleUpload" style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Subir al Sistema">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+        </HBox>
+    </bottom>
+
+</BorderPane>

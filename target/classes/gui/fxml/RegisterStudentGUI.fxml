@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="550.0" prefWidth="650.0" styleClass="mainFxmlClass"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.controller.RegisterStudentGUIController">
+    <stylesheets>
+        <URL value="@teachergui.css" />
+    </stylesheets>
+
+    <children>
+        <VBox layoutX="30.0" layoutY="25.0" spacing="20.0" prefWidth="590.0">
+            <children>
+                <VBox spacing="5.0">
+                    <Label text="Registrar Estudiante">
+                        <font>
+                            <Font name="System Bold" size="22.0" />
+                        </font>
+                    </Label>
+                    <Label text="Complete los siguientes campos para registrar un nuevo estudiante."
+                           textFill="#6b7280" />
+                    <Separator />
+                </VBox>
+
+                <GridPane hgap="15.0" vgap="15.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="NEVER" prefWidth="130.0" />
+                        <ColumnConstraints hgrow="ALWAYS" prefWidth="400.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="40.0" />
+                        <RowConstraints minHeight="40.0" />
+                        <RowConstraints minHeight="40.0" />
+                        <RowConstraints minHeight="40.0" />
+                        <RowConstraints minHeight="40.0" />
+                        <RowConstraints minHeight="40.0" />
+                        <RowConstraints minHeight="40.0" />
+                    </rowConstraints>
+
+                    <Label text="Matrícula:" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <TextField fx:id="enrollmentField" promptText="S21013456" 
+                               GridPane.rowIndex="0" GridPane.columnIndex="1">
+                        <font><Font size="13.0" /></font>
+                    </TextField>
+                    <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <TextField fx:id="nameField" promptText="Juan Carlos"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1">
+                        <font><Font size="13.0" /></font>
+                    </TextField>
+
+                    <!-- Apellido Paterno -->
+                    <Label text="Apellido Paterno:" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <TextField fx:id="paternalSurnameField" promptText="Pérez"
+                               GridPane.rowIndex="2" GridPane.columnIndex="1">
+                        <font><Font size="13.0" /></font>
+                    </TextField>
+
+                    <Label text="Apellido Materno:" GridPane.rowIndex="3" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <TextField fx:id="maternalSurnameField" promptText="González"
+                               GridPane.rowIndex="3" GridPane.columnIndex="1">
+                        <font><Font size="13.0" /></font>
+                    </TextField>
+
+                    <!-- Correo Electrónico -->
+                    <Label text="Correo Electrónico:" GridPane.rowIndex="4" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <TextField fx:id="emailField" promptText="juan.perez@ejemplo.com"
+                               GridPane.rowIndex="4" GridPane.columnIndex="1">
+                        <font><Font size="13.0" /></font>
+                    </TextField>
+
+                    <!-- Contraseña -->
+                    <Label text="Contraseña:" GridPane.rowIndex="5" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <PasswordField fx:id="passwordField" promptText="Mínimo 8 caracteres"
+                                   GridPane.rowIndex="5" GridPane.columnIndex="1">
+                        <font><Font size="13.0" /></font>
+                    </PasswordField>
+
+                    <!-- Confirmar Contraseña -->
+                    <Label text="Confirmar Contraseña:" GridPane.rowIndex="6" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <PasswordField fx:id="confirmPasswordField" promptText="Repite la contraseña"
+                                   GridPane.rowIndex="6" GridPane.columnIndex="1">
+                        <font><Font size="13.0" /></font>
+                    </PasswordField>
+
+                </GridPane>
+
+           
+                <Label fx:id="errorLabel" style="-fx-text-fill: #dc2626; -fx-font-size: 13px;" />
+
+         
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <children>
+                        <Button fx:id="clearButton" onAction="#handleClear" 
+                                prefWidth="100.0" prefHeight="35.0"
+                                style="-fx-background-color: #6b7280; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 13px;"
+                                text="Limpiar" />
+                        <Button fx:id="registerButton" onAction="#handleRegister"
+                                prefWidth="100.0" prefHeight="35.0"
+                                style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 13px; -fx-font-weight: bold;"
+                                text="Registrar" />
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

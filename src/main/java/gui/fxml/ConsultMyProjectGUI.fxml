@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true"
+            style="-fx-background-color: #f1f5f9;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.controller.ConsultMyProjectGUIController">
+
+    <VBox spacing="20" style="-fx-padding: 30; -fx-background-color: #f1f5f9;">
+
+   
+        <VBox spacing="4">
+            <Label text="Mi Proyecto">
+                <font><Font name="System Bold" size="24.0"/></font>
+            </Label>
+            <Label text="Consulta el estado de tu proyecto, actividades y reportes."
+                   style="-fx-text-fill: #6b7280; -fx-font-size: 13px;"/>
+        </VBox>
+
+        <!-- Información general -->
+        <VBox spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 10;
+                     -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-padding: 20;">
+            <Label text="Información General"
+                   style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #1e40af;"/>
+            <GridPane hgap="20" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="15"/>
+                    <ColumnConstraints percentWidth="35"/>
+                    <ColumnConstraints percentWidth="15"/>
+                    <ColumnConstraints percentWidth="35"/>
+                </columnConstraints>
+
+                <Label text="Proyecto:"     style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="projectNameLabel"            GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Organización:" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                <Label fx:id="organizationLabel"           GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                <Label text="Responsable:"  style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="technicalResponsibleLabel"   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Profesor:"     style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                <Label fx:id="professorLabel"              GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                <Label text="Metodología:"  style="-fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="methodologyLabel" wrapText="true"            GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Objetivo:"     style="-fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                <Label fx:id="objectiveLabel"   wrapText="true"            GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+            </GridPane>
+        </VBox>
+
+        <!-- Control de horas -->
+        <VBox spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 10;
+                     -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-padding: 20;">
+            <Label text="Control de Horas"
+                   style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #1e40af;"/>
+            <HBox spacing="40" alignment="CENTER_LEFT">
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="Horas acumuladas" style="-fx-text-fill: #6b7280; -fx-font-size: 12px;"/>
+                    <Label fx:id="accumulatedHoursLabel" text="0 hrs"
+                           style="-fx-font-weight: bold; -fx-font-size: 22px; -fx-text-fill: #2563eb;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="Horas faltantes" style="-fx-text-fill: #6b7280; -fx-font-size: 12px;"/>
+                    <Label fx:id="missingHoursLabel" text="420 hrs"
+                           style="-fx-font-weight: bold; -fx-font-size: 22px; -fx-text-fill: #dc2626;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_RIGHT">
+                        <Label fx:id="progressPercentageLabel" text="0%"
+                               style="-fx-font-weight: bold; -fx-text-fill: #059669;"/>
+                    </HBox>
+                    <ProgressBar fx:id="hoursProgressBar" progress="0.0"
+                                 maxWidth="Infinity" prefHeight="18"
+                                 style="-fx-accent: #2563eb;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Actividades del proyecto -->
+        <VBox spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 10;
+                     -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-padding: 20;">
+            <Label text="Actividades del Proyecto"
+                   style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #1e40af;"/>
+            <TableView fx:id="activitiesTable" prefHeight="200">
+                <columns>
+                    <TableColumn fx:id="columnActivityName"         prefWidth="160" text="Actividad"/>
+                    <TableColumn fx:id="columnActivityDescription"  prefWidth="240" text="Descripción"/>
+                    <TableColumn fx:id="columnActivityStart"        prefWidth="110" text="Inicio planeado"/>
+                    <TableColumn fx:id="columnActivityEnd"          prefWidth="110" text="Fin planeado"/>
+                    <TableColumn fx:id="columnActivityHours"        prefWidth="100" text="Horas planeadas"/>
+                    <TableColumn fx:id="columnActivityProgress"     prefWidth="80"  text="Avance"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <!-- Historial de reportes -->
+        <VBox spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 10;
+                     -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-padding: 20;">
+            <Label text="Historial de Reportes"
+                   style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #1e40af;"/>
+            <TableView fx:id="reportsTable" prefHeight="200">
+                <columns>
+                    <TableColumn fx:id="columnReportType"   prefWidth="120" text="Tipo"/>
+                    <TableColumn fx:id="columnReportDate"   prefWidth="130" text="Fecha de entrega"/>
+                    <TableColumn fx:id="columnReportHours"  prefWidth="120" text="Horas reportadas"/>
+                    <TableColumn fx:id="columnReportStatus" prefWidth="120" text="Estado"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

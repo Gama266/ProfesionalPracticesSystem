@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.usersviews.StudentMenuGUIController">
+   <left>
+      <VBox prefHeight="700.0" prefWidth="260.0" style="-fx-background-color: #1e293b;" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Sistema Prácticas" textFill="WHITE">
+               <font><Font name="System Bold" size="22.0" /></font>
+               <VBox.margin><Insets bottom="5.0" left="20.0" top="30.0" /></VBox.margin>
+            </Label>
+            <Label text="Módulo Estudiante" textFill="#94a3b8">
+               <font><Font size="13.0" /></font>
+               <VBox.margin><Insets bottom="30.0" left="20.0" /></VBox.margin>
+            </Label>
+
+            <Accordion VBox.vgrow="ALWAYS">
+              <panes>
+
+                <TitledPane animated="true" text="Mi Proyecto">
+                   <content>
+                      <VBox spacing="5.0" style="-fx-background-color: #334155;">
+                         <children>
+                            <Button mnemonicParsing="false" onAction="#openMyProjectView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Ver Mi Proyecto" />
+                            <Button mnemonicParsing="false" onAction="#openRequestProjectView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Solicitar Proyecto" />
+                         </children>
+                      </VBox>
+                   </content>
+                   <font><Font name="System Bold" size="13.0" /></font>
+                </TitledPane>
+
+                <TitledPane animated="true" text="Formatos Iniciales">
+                   <content>
+                      <VBox spacing="5.0" style="-fx-background-color: #334155;">
+                         <children>
+                            <Button mnemonicParsing="false" onAction="#openGenerateInitialFormatsView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Generar Formatos" />
+                            <Button mnemonicParsing="false" onAction="#openUploadInitialFormatsView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Subir Formatos Firmados" />
+                         </children>
+                      </VBox>
+                   </content>
+                   <font><Font name="System Bold" size="13.0" /></font>
+                </TitledPane>
+
+                <TitledPane animated="true" text="Reportes">
+                   <content>
+                      <VBox spacing="5.0" style="-fx-background-color: #334155;">
+                         <children>
+                            <Button mnemonicParsing="false" onAction="#openGenerateReportView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Generar Reporte" />
+                            <Button mnemonicParsing="false" onAction="#openUploadSignedReportView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Subir Reporte Firmado" />
+                         </children>
+                      </VBox>
+                   </content>
+                   <font><Font name="System Bold" size="13.0" /></font>
+                </TitledPane>
+
+                <TitledPane animated="true" text="Evaluaciones">
+                   <content>
+                      <VBox spacing="5.0" style="-fx-background-color: #334155;">
+                         <children>
+                            <Button mnemonicParsing="false" onAction="#openGenerateSelfEvaluationView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Generar Autoevaluación" />
+                            <Button mnemonicParsing="false" onAction="#openUploadSelfEvaluationView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Subir Autoevaluación" />
+                            <Button mnemonicParsing="false" onAction="#openUploadOrganizationEvaluationView"
+                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
+                                    text="Subir Eval. de Organización" />
+                         </children>
+                      </VBox>
+                   </content>
+                   <font><Font name="System Bold" size="13.0" /></font>
+                </TitledPane>
+
+              </panes>
+            </Accordion>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <StackPane fx:id="contentStackPane" style="-fx-background-color: #f1f5f9;" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

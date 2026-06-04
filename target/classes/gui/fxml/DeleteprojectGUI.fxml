@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #f1f5f9; -fx-padding: 30;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.DeleteProjectGUIController">
+    <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10;">
+        <Label text="Gestión de Proyectos"><font><Font name="System Bold" size="20.0" /></font></Label>
+        <Label text="Seleccione un proyecto para ocultarlo del catálogo de estudiantes." textFill="#64748b" />
+    </VBox>
+    <TableView fx:id="tableProjects" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="columnId" prefWidth="100.0" text="ID Proyecto" />
+            <TableColumn fx:id="columnName" prefWidth="300.0" text="Nombre del Proyecto" />
+            <TableColumn fx:id="columnOrg" prefWidth="250.0" text="Organización Vinculada" />
+            <TableColumn fx:id="columnActions" prefWidth="100.0" text="Acciones" />
+        </columns>
+    </TableView>
+</VBox>

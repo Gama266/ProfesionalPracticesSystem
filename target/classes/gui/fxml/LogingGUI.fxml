@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600.0" prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.controller.LoginController">
+
+    <left>
+        <VBox prefWidth="420.0" prefHeight="600.0"
+              alignment="CENTER"
+              style="-fx-background-color: #1e293b;">
+
+            <Rectangle width="60" height="5" arcWidth="5" arcHeight="5"
+                       fill="#3b82f6"/>
+
+            <VBox.margin>
+                <Insets top="0"/>
+            </VBox.margin>
+
+            <Label text="Sistema de"
+                   textFill="#94a3b8"
+                   style="-fx-font-size: 15px; -fx-font-weight: normal;">
+                <VBox.margin><Insets top="40"/></VBox.margin>
+            </Label>
+
+            <Label text="Prácticas"
+                   textFill="WHITE"
+                   style="-fx-font-size: 42px; -fx-font-weight: bold;">
+            </Label>
+
+            <Label text="Profesionales"
+                   textFill="#3b82f6"
+                   style="-fx-font-size: 42px; -fx-font-weight: bold;">
+            </Label>
+
+            <Region prefHeight="20"/>
+
+            <HBox alignment="CENTER" spacing="8">
+                <Rectangle width="30" height="2" fill="#334155"/>
+                <Rectangle width="8"  height="8" arcWidth="8" arcHeight="8" fill="#3b82f6"/>
+                <Rectangle width="30" height="2" fill="#334155"/>
+            </HBox>
+
+            <Region prefHeight="20"/>
+
+            <Label text="Universidad Veracruzana"
+                   textFill="#64748b"
+                   style="-fx-font-size: 13px;">
+            </Label>
+
+            <Label text="Facultad de Estadística e Informática"
+                   textFill="#64748b"
+                   style="-fx-font-size: 12px;">
+                <VBox.margin><Insets bottom="60"/></VBox.margin>
+            </Label>
+
+            <Label text="Acceso para:" textFill="#475569" style="-fx-font-size: 11px;"/>
+            <Region prefHeight="8"/>
+            <HBox alignment="CENTER" spacing="8">
+                <Label text="Coordinador"  style="-fx-background-color: #1e3a5f; -fx-text-fill: #60a5fa; -fx-background-radius: 20; -fx-padding: 4 12 4 12; -fx-font-size: 11px;"/>
+                <Label text="Profesor"     style="-fx-background-color: #1e3a5f; -fx-text-fill: #60a5fa; -fx-background-radius: 20; -fx-padding: 4 12 4 12; -fx-font-size: 11px;"/>
+                <Label text="Admin"        style="-fx-background-color: #1e3a5f; -fx-text-fill: #60a5fa; -fx-background-radius: 20; -fx-padding: 4 12 4 12; -fx-font-size: 11px;"/>
+                <Label text="Estudiante"   style="-fx-background-color: #1e3a5f; -fx-text-fill: #60a5fa; -fx-background-radius: 20; -fx-padding: 4 12 4 12; -fx-font-size: 11px;"/>
+            </HBox>
+        </VBox>
+    </left>
+    <center>
+        <StackPane style="-fx-background-color: #f8fafc;">
+
+            <VBox alignment="CENTER" maxWidth="380" spacing="0">
+
+                <Label text="Iniciar Sesión"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #0f172a;">
+                    <VBox.margin><Insets bottom="6"/></VBox.margin>
+                </Label>
+
+                <Label text="Ingresa tus credenciales para continuar"
+                       style="-fx-font-size: 13px; -fx-text-fill: #64748b;">
+                    <VBox.margin><Insets bottom="40"/></VBox.margin>
+                </Label>
+
+                <Label text="Correo electrónico"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;">
+                    <VBox.margin><Insets bottom="6"/></VBox.margin>
+                </Label>
+                <TextField fx:id="txtEmail"
+                           promptText="usuario@ejemplo.com"
+                           prefWidth="360"
+                           prefHeight="44"
+                           style="-fx-background-color: white;
+                                  -fx-border-color: #d1d5db;
+                                  -fx-border-radius: 8;
+                                  -fx-background-radius: 8;
+                                  -fx-padding: 10 14;
+                                  -fx-font-size: 14px;">
+                    <VBox.margin><Insets bottom="18"/></VBox.margin>
+                </TextField>
+
+                <Label text="Contraseña"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;">
+                    <VBox.margin><Insets bottom="6"/></VBox.margin>
+                </Label>
+                <PasswordField fx:id="txtPassword"
+                               promptText="••••••••"
+                               prefWidth="360"
+                               prefHeight="44"
+                               style="-fx-background-color: white;
+                                      -fx-border-color: #d1d5db;
+                                      -fx-border-radius: 8;
+                                      -fx-background-radius: 8;
+                                      -fx-padding: 10 14;
+                                      -fx-font-size: 14px;">
+                    <VBox.margin><Insets bottom="8"/></VBox.margin>
+                </PasswordField>
+
+                <Label fx:id="lblError"
+                       text=""
+                       style="-fx-text-fill: #ef4444; -fx-font-size: 12px;"
+                       wrapText="true" maxWidth="360">
+                    <VBox.margin><Insets bottom="18"/></VBox.margin>
+                </Label>
+
+                <Button fx:id="btnLogin"
+                        text="Ingresar"
+                        onAction="#handleLogin"
+                        prefWidth="360"
+                        prefHeight="46"
+                        defaultButton="true"
+                        style="-fx-background-color: #1d4ed8;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 8;
+                               -fx-cursor: hand;">
+                    <VBox.margin><Insets bottom="24"/></VBox.margin>
+                </Button>
+
+                <Label text="v1.0 · Sistema de Prácticas Profesionales"
+                       style="-fx-font-size: 11px; -fx-text-fill: #9ca3af;"
+                       alignment="CENTER" maxWidth="360"/>
+
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: #f1f5f9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.coordinatorUsesCase.RegisterLinkedOrganizationGUIController">
+    <VBox alignment="CENTER" style="-fx-padding: 30;">
+        <VBox maxWidth="700.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+            
+            <Label text="Formulario de Registro: Organización Vinculada">
+                <font><Font name="System Bold" size="22.0" /></font>
+            </Label>
+            <Separator />
+            
+            <Label text="DATOS DE LA ENTIDAD" textFill="#2563eb">
+                <font><Font name="System Bold" size="14.0" /></font>
+            </Label>
+            <TextField fx:id="textFieldOrganizationName" promptText="Nombre de la Organización *" style="-fx-padding: 10;" />
+            <TextField fx:id="textFieldPhysicalAddress" promptText="Dirección Física *" style="-fx-padding: 10;" />
+            
+            <Label text="UBICACIÓN" textFill="#2563eb">
+                <font><Font name="System Bold" size="14.0" /></font>
+            </Label>
+            <HBox spacing="20.0">
+                <ComboBox fx:id="comboBoxCountry" promptText="Seleccione un País *" maxWidth="Infinity" HBox.hgrow="ALWAYS" style="-fx-padding: 5; -fx-background-color: #f8fafc; -fx-border-color: #cbd5e1; -fx-border-radius: 3;" />
+                <ComboBox fx:id="comboBoxState" promptText="Seleccione un Estado *" maxWidth="Infinity" HBox.hgrow="ALWAYS" style="-fx-padding: 5; -fx-background-color: #f8fafc; -fx-border-color: #cbd5e1; -fx-border-radius: 3;" />
+            </HBox>
+
+            <Label text="CONTACTO" textFill="#2563eb">
+                <font><Font name="System Bold" size="14.0" /></font>
+            </Label>
+            <HBox spacing="20.0">
+                <TextField fx:id="textFieldPhoneNumber" promptText="Número de Teléfono *" HBox.hgrow="ALWAYS" style="-fx-padding: 10;" />
+                <TextField fx:id="textFieldEmailAddress" promptText="Correo Electrónico *" HBox.hgrow="ALWAYS" style="-fx-padding: 10;" />
+            </HBox>
+            
+            <Separator />
+
+            <HBox alignment="CENTER_RIGHT" spacing="15.0" style="-fx-padding: 10 0 0 0;">
+                <Button fx:id="buttonCancel" mnemonicParsing="false" onAction="#buttonCancelOnAction" text="Cancelar" 
+                        style="-fx-background-color: white; -fx-text-fill: #64748b; -fx-border-color: #e2e8f0; -fx-border-radius: 5; -fx-padding: 10 25; -fx-cursor: hand;" />
+                
+                <Button fx:id="buttonSaveOrganization" mnemonicParsing="false" onAction="#buttonSaveOrganizationOnAction" text="Guardar Organización" 
+                        style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 25; -fx-cursor: hand;" />
+            </HBox>
+            
+        </VBox>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox prefHeight="650.0" prefWidth="1000.0" spacing="15.0"
+      style="-fx-background-color: #f1f5f9; -fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gui.controller.AssignProjectGUIController">
+
+    <Label text="Asignar Proyecto">
+        <font><Font name="System Bold" size="20.0"/></font>
+    </Label>
+
+    <Separator/>
+
+    <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+
+      
+        <VBox spacing="8.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
+            <Label text="Estudiantes con solicitudes pendientes">
+                <font><Font name="System Bold" size="14.0"/></font>
+            </Label>
+            <TableView fx:id="tableStudents" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="columnStudentName"
+                                 text="Nombre"
+                                 prefWidth="230.0"/>
+                    <TableColumn fx:id="columnStudentMatricula"
+                                 text="Matrícula"
+                                 prefWidth="110.0"/>
+                </columns>
+                <placeholder>
+                    <Label text="No hay estudiantes con solicitudes pendientes."/>
+                </placeholder>
+            </TableView>
+        </VBox>
+        <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label text="Proyectos solicitados por:">
+                    <font><Font name="System Bold" size="14.0"/></font>
+                </Label>
+                <Label fx:id="labelSelectedStudent"
+                       text="Ningún estudiante seleccionado"
+                       style="-fx-text-fill: #64748b;"/>
+            </HBox>
+            <TableView fx:id="tableRequestedProjects" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="columnProjectName"
+                                 text="Proyecto"
+                                 prefWidth="200.0"/>
+                    <TableColumn fx:id="columnOrganization"
+                                 text="Organización Vinculada"
+                                 prefWidth="180.0"/>
+                    <TableColumn fx:id="columnTechnicalResponsible"
+                                 text="Responsable Técnico"
+                                 prefWidth="180.0"/>
+                    <TableColumn fx:id="columnAvailability"
+                                 text="Disponibilidad"
+                                 prefWidth="100.0"/>
+                </columns>
+                <placeholder>
+                    <Label text="Selecciona un estudiante para ver sus solicitudes."/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+    </HBox>
+
+    <Separator/>
+
+    <HBox spacing="15.0" alignment="CENTER_RIGHT">
+        <Button fx:id="btnNotAssignProject"
+                text="No asignar Proyecto"
+                onAction="#handleNotAssignProject"
+                disable="true"/>
+        <Button fx:id="btnAssignProject"
+                text="Asignar Proyecto"
+                onAction="#handleAssignProject"
+                disable="true"
+                defaultButton="true"/>
+    </HBox>
+
+</VBox>

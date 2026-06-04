@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane prefHeight="460.0" prefWidth="600.0" styleClass="mainFxmlClass"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.controller.adminUsesCase.RegisterTeacherGUIController">
+    <stylesheets>
+        <URL value="@teachergui.css" />
+    </stylesheets>
+    <children>
+        <AnchorPane prefHeight="460.0" prefWidth="600.0">
+            <children>
+                <VBox layoutX="111.0" layoutY="48.0" prefWidth="334.0" spacing="4.0">
+                    <children>
+                        <Label text="Registrar personal académico" />
+
+                        <Label text="Número de personal" />
+                        <TextField fx:id="personalNumberField" />
+
+                        <Label text="Nombre(s)" />
+                        <TextField fx:id="nameField" />
+
+                        <Label text="Apellido paterno" />
+                        <TextField fx:id="paternalSurnameField" />
+
+                        <Label text="Apellido materno" />
+                        <TextField fx:id="maternalSurnameField" />
+
+                        <Label text="Correo electrónico" />
+                        <TextField fx:id="emailField" promptText="ejemplo@correo.com" />
+
+                        <Label text="Contraseña" />
+                        <PasswordField fx:id="passwordField" />
+
+                        <RadioButton fx:id="coordinatorRadioButton" mnemonicParsing="false" text="Coordinador" />
+                        <RadioButton fx:id="teacherRadioButton"     mnemonicParsing="false" text="Profesor" />
+                    </children>
+                </VBox>
+                <HBox layoutX="446.0" layoutY="430.0" prefHeight="26.0" prefWidth="162.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#handleCancel"   prefHeight="26.0" prefWidth="79.0"  text="Cancelar" />
+                        <Button mnemonicParsing="false" onAction="#handleRegister" prefHeight="26.0" prefWidth="86.0" text="Guardar" />
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

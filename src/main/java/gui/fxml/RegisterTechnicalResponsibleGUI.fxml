@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.coordinatorUsesCase.RegisterTechnicalResponsibleGUIController">
+    <stylesheets>
+        <URL value="@technicalresponsiblegui.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane prefHeight="450.0" prefWidth="602.0">
+         <children>
+            <VBox layoutY="14.0" prefHeight="62.0" prefWidth="280.0">
+               <children>
+                  <Label prefHeight="48.0" prefWidth="318.0" text="Registrar responsable técnico" style="-fx-padding: 0 0 0 20;">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox layoutX="123.0" layoutY="70.0" prefHeight="350.0" prefWidth="330.0" spacing="5.0">
+               <children>
+                  <Label text="Nombre" />
+                  <TextField fx:id="textFieldName" />
+                  
+                  <Label text="Apellido paterno" />
+                  <TextField fx:id="textFieldPaternalSurname" />
+                  
+                  <Label text="Apellido materno" />
+                  <TextField fx:id="textFieldMaternalSurname" />
+                  
+                  <Label text="Teléfono" />
+                  <TextField fx:id="textFieldPhoneNumber" />
+                  
+                  <Label text="Correo Electrónico" />
+                  <TextField fx:id="textFieldEmail" />
+                  
+                  <Label text="Organización Vinculada" />
+                  <ComboBox fx:id="comboBoxLinkedOrganization" prefWidth="330.0" promptText="Seleccione una organización..." />
+               </children>
+            </VBox>
+            <HBox layoutX="380.0" layoutY="410.0" prefHeight="26.0" prefWidth="202.0" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#actionButtonCancel" prefHeight="26.0" prefWidth="100.0" text="Cancelar" />
+                  <Button mnemonicParsing="false" onAction="#actionButtonSave" prefHeight="26.0" prefWidth="100.0" text="Guardar" />
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--
+    GenerateReportGUI.fxml
+    Vista principal para que el alumno genere sus tres tipos de reporte.
+    El controller asociado es GenerateReportGUIController.java
+    
+    Estructura de secciones:
+      1. Cabecera  — datos generales jalados automáticamente del proyecto
+      2. Selector  — tipo de reporte y periodo
+      3. Mensual   — bitácora semanal con checkboxes por actividad
+      4. Parcial   — tabla planeado vs real + criterios de desempeño (solo lectura)
+      5. Final     — tabla de actividades + tabla de entregables
+-->
+<BorderPane prefHeight="750.0" prefWidth="950.0"
+            style="-fx-background-color: #f8fafc;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.controller.GenerateReportGUIController">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ENCABEZADO DE PANTALLA
+    ══════════════════════════════════════════════════════════════════════ -->
+    <top>
+        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+            <padding><Insets bottom="15.0" left="28.0" right="28.0" top="26.0"/></padding>
+            <Label text="GENERACIÓN DE REPORTES" textFill="#2bbfaa">
+                <font><Font name="System Bold" size="14.0"/></font>
+            </Label>
+            <Label text="Los datos del proyecto se cargan automáticamente. Complete la información según el tipo de reporte."
+                   textFill="#7a8fa6" wrapText="true">
+                <font><Font size="12.0"/></font>
+            </Label>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
+            <content>
+                <VBox spacing="20.0">
+                    <padding><Insets bottom="30.0" left="28.0" right="28.0" top="10.0"/></padding>
+
+                    <!-- ══════════════════════════════════════════════════════
+                         SECCIÓN 1 — DATOS GENERALES DE CABECERA
+                         Todos estos labels se llenan automáticamente desde
+                         ReportGeneralData al inicializar el controller.
+                         El alumno no edita ninguno de estos campos.
+                    ══════════════════════════════════════════════════════ -->
+                    <VBox spacing="10.0" style="-fx-background-color: white; -fx-border-color: #e2e8f0; -fx-border-radius: 5px; -fx-background-radius: 5px;">
+                        <padding><Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/></padding>
+                        <Label text="DATOS GENERALES DEL PROYECTO" textFill="#2bbfaa">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Separator/>
+                        <GridPane hgap="20.0" vgap="12.0">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50.0"/>
+                                <ColumnConstraints percentWidth="50.0"/>
+                            </columnConstraints>
+
+                            <!-- Fila 0: Alumno y Matrícula -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Alumno" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <Label fx:id="studentNameLabel" text="—" textFill="#2c4a66" wrapText="true">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Matrícula" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <!-- fx:id nuevo — antes no existía en el FXML original -->
+                                <Label fx:id="studentMatriculaLabel" text="—" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+
+                            <!-- Fila 1: Profesor y Responsable Técnico -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Profesor" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <Label fx:id="professorNameLabel" text="—" textFill="#2c4a66" wrapText="true">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Responsable Técnico" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <Label fx:id="responsibleNameLabel" text="—" textFill="#2c4a66" wrapText="true">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+
+                            <!-- Fila 2: Organización y NRC -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="Organización Vinculada" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <!-- fx:id nuevo — antes no existía -->
+                                <Label fx:id="organizationNameLabel" text="—" textFill="#2c4a66" wrapText="true">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="NRC / Sección" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <Label fx:id="nrcSectionLabel" text="—" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+
+                            <!-- Fila 3: Proyecto y Número de informe -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                <Label text="Proyecto" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <Label fx:id="projectNameLabel" text="—" textFill="#2c4a66" wrapText="true">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Label text="Número de Informe" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <!-- fx:id nuevo — el sistema lo calcula automáticamente -->
+                                <Label fx:id="reportNumberLabel" text="—" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+
+                            <!-- Fila 4: Metodología -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                <Label text="Metodología" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <Label fx:id="methodologyLabel" text="—" textFill="#2c4a66" wrapText="true">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+                            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                <Label text="Periodo Escolar" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <!-- fx:id nuevo — se forma con eeStartDate + eeEndDate -->
+                                <Label fx:id="schoolPeriodLabel" text="—" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+
+                            <!-- Fila 5: Objetivo (ocupa toda la fila) -->
+                            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2">
+                                <Label text="Objetivo General" textFill="#7a8fa6"><font><Font size="11.0"/></font></Label>
+                                <Label fx:id="objectiveLabel" text="—" textFill="#2c4a66" wrapText="true">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                            </VBox>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- ══════════════════════════════════════════════════════
+                         SECCIÓN 2 — SELECTOR DE TIPO Y PERIODO
+                    ══════════════════════════════════════════════════════ -->
+                    <GridPane hgap="20.0" vgap="10.0">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50.0"/>
+                            <ColumnConstraints percentWidth="50.0"/>
+                        </columnConstraints>
+                        <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Tipo de Reporte *" textFill="#2c4a66">
+                                <font><Font name="System Bold" size="12.0"/></font>
+                            </Label>
+                            <ComboBox fx:id="reportTypeComboBox" maxWidth="1.7976931348623157E308"
+                                      prefHeight="36.0" promptText="Seleccione el tipo..."
+                                      style="-fx-background-color: white; -fx-border-color: #cdd4dc; -fx-border-radius: 3px;"/>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Período del Reporte *" textFill="#2c4a66">
+                                <font><Font name="System Bold" size="12.0"/></font>
+                            </Label>
+                            <TextField fx:id="periodTextField" prefHeight="36.0"
+                                       promptText="Ej. Febrero 2026 - Julio 2026"/>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- ══════════════════════════════════════════════════════
+                         SECCIÓN 3 — REPORTE MENSUAL
+                         Visible solo cuando el alumno selecciona "MENSUAL".
+                         Muestra horas, mes, y checkboxes de actividades
+                         con campos de semanas y observaciones por actividad.
+                    ══════════════════════════════════════════════════════ -->
+                    <VBox fx:id="monthlySection" spacing="15.0" managed="false" visible="false">
+                        <Label text="DETALLE DEL REPORTE MENSUAL" textFill="#2bbfaa">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Separator/>
+
+                        <GridPane hgap="20.0" vgap="10.0">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="33.0"/>
+                                <ColumnConstraints percentWidth="33.0"/>
+                                <ColumnConstraints percentWidth="34.0"/>
+                            </columnConstraints>
+
+                            <!-- Mes, horas del mes y horas acumuladas -->
+                            <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Mes reportado *" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                                <ComboBox fx:id="monthComboBox" maxWidth="1.7976931348623157E308"
+                                          prefHeight="36.0" promptText="Seleccione..."
+                                          style="-fx-background-color: white; -fx-border-color: #cdd4dc; -fx-border-radius: 3px;"/>
+                            </VBox>
+                            <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Horas elaboradas este mes *" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                                <TextField fx:id="monthlyHoursField" prefHeight="36.0" promptText="Ej. 80"/>
+                            </VBox>
+                            <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label text="Horas acumuladas aprobadas" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                                <Label fx:id="accumulatedHoursLabel" text="0 hrs"
+                                       style="-fx-background-color: #f1f5f9; -fx-padding: 8px; -fx-border-color: #cdd4dc; -fx-border-radius: 3px;"
+                                       maxWidth="1.7976931348623157E308" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="13.0"/></font>
+                                </Label>
+                            </VBox>
+
+                            <!-- Nombre del responsable directo (nuevo campo) y horas faltantes -->
+                            <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                                <Label text="Nombre del Responsable Directo *" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                                <!-- Campo nuevo: el responsable directo puede ser distinto
+                                     al responsable técnico registrado en el proyecto -->
+                                <TextField fx:id="directResponsibleField" prefHeight="36.0"
+                                           promptText="Nombre de quien supervisa directamente este mes"/>
+                            </VBox>
+                            <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Label text="Horas faltantes" textFill="#2c4a66">
+                                    <font><Font name="System Bold" size="12.0"/></font>
+                                </Label>
+                                <Label fx:id="missingHoursLabel" text="480 hrs"
+                                       style="-fx-background-color: #fff5f5; -fx-padding: 8px; -fx-border-color: #feb2b2; -fx-border-radius: 3px;"
+                                       maxWidth="1.7976931348623157E308" textFill="#c53030">
+                                    <font><Font name="System Bold" size="13.0"/></font>
+                                </Label>
+                            </VBox>
+                        </GridPane>
+
+                        <!-- Checkboxes de actividades — se generan dinámicamente en el controller -->
+                        <VBox spacing="8.0">
+                            <Label text="Actividades realizadas este mes *" textFill="#2c4a66">
+                                <font><Font name="System Bold" size="12.0"/></font>
+                            </Label>
+                            <Label text="Selecciona las actividades en las que trabajaste y completa el detalle de cada una."
+                                   textFill="#7a8fa6" wrapText="true">
+                                <font><Font size="11.0"/></font>
+                            </Label>
+                            <VBox fx:id="activitiesCheckboxContainer" spacing="8.0"/>
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <Label text="Observaciones generales del mes" textFill="#2c4a66">
+                                <font><Font name="System Bold" size="12.0"/></font>
+                            </Label>
+                            <TextArea fx:id="monthlyObservationsArea" prefRowCount="3" wrapText="true"
+                                      promptText="Comentarios, acuerdos o justificaciones del mes..."/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- ══════════════════════════════════════════════════════
+                         SECCIÓN 4 — REPORTE PARCIAL
+                         Visible solo cuando el alumno selecciona "PARCIAL".
+                         Muestra tabla planeado vs real y criterios de desempeño.
+                    ══════════════════════════════════════════════════════ -->
+                    <VBox fx:id="partialSection" spacing="15.0" managed="false" visible="false">
+                        <Label text="DETALLE DEL REPORTE PARCIAL — 210 HORAS" textFill="#2bbfaa">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Separator/>
+
+                        <!-- Horas cubiertas al corte parcial -->
+                        <HBox spacing="10.0">
+                            <Label text="Horas cubiertas al corte:" textFill="#2c4a66">
+                                <font><Font name="System Bold" size="12.0"/></font>
+                            </Label>
+                            <Label fx:id="partialCoveredHoursLabel" text="210 hrs" textFill="#2bbfaa">
+                                <font><Font name="System Bold" size="12.0"/></font>
+                            </Label>
+                        </HBox>
+
+                        <!-- Tabla de actividades: Planeado vs Real -->
+                        <Label text="Avance de Actividades — Planeado vs. Real" textFill="#2c4a66">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Label text="Capture las semanas reales trabajadas, el porcentaje de avance y observaciones."
+                               textFill="#7a8fa6" wrapText="true">
+                            <font><Font size="11.0"/></font>
+                        </Label>
+                        <TableView fx:id="partialActivitiesTable" prefHeight="250.0" editable="true">
+                            <columns>
+                                <TableColumn fx:id="pActNameColumn"      text="Actividad"         prefWidth="150.0"/>
+                                <TableColumn fx:id="pPlannedStartColumn" text="Inicio Planeado"   prefWidth="110.0"/>
+                                <TableColumn fx:id="pPlannedEndColumn"   text="Fin Planeado"      prefWidth="110.0"/>
+                                <TableColumn fx:id="pPlannedHoursColumn" text="Hrs. Planeadas"    prefWidth="90.0"/>
+                                <TableColumn fx:id="pCoveredWeeksColumn" text="Semanas Reales"    prefWidth="130.0"/>
+                                <TableColumn fx:id="pProgressColumn"     text="Avance %"          prefWidth="80.0"/>
+                                <TableColumn fx:id="pAdvanceObsColumn"   text="Observaciones"     prefWidth="180.0"/>
+                            </columns>
+                            <placeholder><Label text="No hay actividades registradas para este proyecto"/></placeholder>
+                        </TableView>
+
+                        <!-- Tabla de criterios de desempeño — SOLO LECTURA para el alumno -->
+                        <!-- El profesor es quien evalúa estos criterios en el formato impreso -->
+                        <Label text="Criterios de Evaluación de Desempeño" textFill="#2c4a66">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Label text="Estos criterios serán evaluados por tu profesor en el documento impreso. Se incluyen en el PDF para su referencia."
+                               textFill="#7a8fa6" wrapText="true">
+                            <font><Font size="11.0"/></font>
+                        </Label>
+                        <!-- editable="false" porque el alumno no llena esta tabla -->
+                        <TableView fx:id="criteriaTable" prefHeight="160.0" editable="false">
+                            <columns>
+                                <TableColumn fx:id="criterionColumn"    text="Criterio de Evaluación" prefWidth="380.0"/>
+                                <TableColumn fx:id="criterionLevelColumn" text="Nivel"               prefWidth="150.0"/>
+                            </columns>
+                            <placeholder><Label text="Cargando criterios..."/></placeholder>
+                        </TableView>
+                    </VBox>
+
+                    <!-- ══════════════════════════════════════════════════════
+                         SECCIÓN 5 — REPORTE FINAL
+                         Visible solo cuando el alumno selecciona "FINAL".
+                         Muestra tabla de actividades con % obligatorio
+                         y tabla exclusiva de entregables/productos.
+                    ══════════════════════════════════════════════════════ -->
+                    <VBox fx:id="finalSection" spacing="15.0" managed="false" visible="false">
+                        <Label text="DETALLE DEL REPORTE FINAL" textFill="#2bbfaa">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Separator/>
+
+                        <!-- Tabla de actividades finales -->
+                        <Label text="Actividades Programadas — Cierre Final" textFill="#2c4a66">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Label text="Si alguna actividad no llegó al 100%, las observaciones son obligatorias."
+                               textFill="#e53e3e" wrapText="true">
+                            <font><Font size="11.0"/></font>
+                        </Label>
+                        <TableView fx:id="finalActivitiesTable" prefHeight="250.0" editable="true">
+                            <columns>
+                                <TableColumn fx:id="fActNameColumn"      text="Actividad"         prefWidth="150.0"/>
+                                <TableColumn fx:id="fPlannedStartColumn" text="Inicio Planeado"   prefWidth="110.0"/>
+                                <TableColumn fx:id="fPlannedEndColumn"   text="Fin Planeado"      prefWidth="110.0"/>
+                                <TableColumn fx:id="fPlannedHoursColumn" text="Hrs. Planeadas"    prefWidth="90.0"/>
+                                <TableColumn fx:id="fCoveredWeeksColumn" text="Semanas Reales"    prefWidth="130.0"/>
+                                <TableColumn fx:id="fProgressColumn"     text="Avance %"          prefWidth="80.0"/>
+                                <TableColumn fx:id="fAdvanceObsColumn"   text="Observaciones *"   prefWidth="180.0"/>
+                            </columns>
+                            <placeholder><Label text="No hay actividades registradas para este proyecto"/></placeholder>
+                        </TableView>
+
+                        <!-- Tabla de entregables — exclusiva del reporte final -->
+                        <Label text="Resultados en Término de Productos Comprometidos" textFill="#2c4a66">
+                            <font><Font name="System Bold" size="12.0"/></font>
+                        </Label>
+                        <Label text="Liste los productos o entregables generados durante las prácticas."
+                               textFill="#7a8fa6" wrapText="true">
+                            <font><Font size="11.0"/></font>
+                        </Label>
+                        <TableView fx:id="deliverablesTable" prefHeight="180.0" editable="true">
+                            <columns>
+                                <!-- Descripción del entregable — el alumno la escribe -->
+                                <TableColumn fx:id="deliverableDescColumn"     text="Producto / Entregable" prefWidth="280.0"/>
+                                <TableColumn fx:id="deliverableProgressColumn" text="Avance %"              prefWidth="90.0"/>
+                                <TableColumn fx:id="deliverableObsColumn"      text="Observaciones"         prefWidth="280.0"/>
+                            </columns>
+                            <placeholder><Label text="Agregue los entregables del proyecto"/></placeholder>
+                        </TableView>
+
+                        <!-- Botón para agregar filas a la tabla de entregables -->
+                        <HBox alignment="CENTER_LEFT">
+                            <Button mnemonicParsing="false" onAction="#handleAddDeliverable"
+                                    prefHeight="32.0" text="+ Agregar Entregable"
+                                    style="-fx-background-color: #f1f5f9; -fx-border-color: #cdd4dc; -fx-border-radius: 3px; -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Mensaje de sistema (errores y confirmaciones) -->
+                    <Label fx:id="systemMessageLabel" visible="false" wrapText="true">
+                        <font><Font size="11.0"/></font>
+                    </Label>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         BOTONES DE ACCIÓN
+    ══════════════════════════════════════════════════════════════════════ -->
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="15.0" BorderPane.alignment="CENTER">
+            <padding><Insets bottom="20.0" left="28.0" right="28.0" top="10.0"/></padding>
+            <Button mnemonicParsing="false" onAction="#handleClear"
+                    prefHeight="36.0" text="Limpiar"/>
+            <Button mnemonicParsing="false" onAction="#handleSave" prefHeight="36.0"
+                    style="-fx-background-color: #2c4a66; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"
+                    text="Guardar"/>
+            <Button mnemonicParsing="false" onAction="#handleGeneratePDF" prefHeight="36.0"
+                    style="-fx-background-color: #2bbfaa; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"
+                    text="Generar y Descargar PDF"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

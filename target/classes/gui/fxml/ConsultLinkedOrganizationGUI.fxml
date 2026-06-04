@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #f1f5f9; -fx-padding: 30;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ConsultLinkedOrganizationGUIController">
+    <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10;">
+        <Label text="Directorio de Organizaciones Vinculadas"><font><Font name="System Bold" size="20.0" /></font></Label>
+        <Label text="Directorio de las organizaciones registradas en el sistema." textFill="#64748b" />
+    </VBox>
+    <TableView fx:id="tableOrgs" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="columnOrgName" prefWidth="250.0" text="Nombre / Razón Social" />
+            <TableColumn fx:id="columnAddress" prefWidth="250.0" text="Dirección" />
+            <TableColumn fx:id="columnPhoneNumber" prefWidth="130.0" text="Teléfono" />
+        </columns>
+    </TableView>
+</VBox>
