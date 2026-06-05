@@ -18,8 +18,8 @@ import logic.exceptions.DAOException;
 public interface IEducationalExperienceDAO {
    boolean registerEducationalExperience(EducationalExperience experience) throws DAOException;
    
-   List<EducationalExperience> getByDateRange(LocalDate startDate, LocalDate endDate)
-            throws DAOException;
-   
+   List<EducationalExperience> getByDateRange(LocalDate startDate, LocalDate endDate) throws DAOException;
+    List<EducationalExperience> getAllEducationalExperiences() throws DAOException;
    EducationalExperience getNrc(int nrc) throws DAOException;
+  
 }

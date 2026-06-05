@@ -30,12 +30,8 @@
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
                          <children>
-                            <Button mnemonicParsing="false" onAction="#openMyProjectView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Ver Mi Proyecto" />
-                            <Button mnemonicParsing="false" onAction="#openRequestProjectView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Solicitar Proyecto" />
+                            <Button mnemonicParsing="false" onAction="#openMyProjectView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Ver Mi Proyecto" />
+                            <Button mnemonicParsing="false" onAction="#openRequestProjectView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Solicitar Proyecto" />
                          </children>
                       </VBox>
                    </content>
@@ -46,12 +42,8 @@
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
                          <children>
-                            <Button mnemonicParsing="false" onAction="#openGenerateInitialFormatsView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Generar Formatos" />
-                            <Button mnemonicParsing="false" onAction="#openUploadInitialFormatsView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Subir Formatos Firmados" />
+                            <Button mnemonicParsing="false" onAction="#openGenerateInitialFormatsView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Generar Formatos" />
+                            <Button mnemonicParsing="false" onAction="#openUploadInitialFormatsView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Subir Formatos Firmados" />
                          </children>
                       </VBox>
                    </content>
@@ -62,12 +54,8 @@
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
                          <children>
-                            <Button mnemonicParsing="false" onAction="#openGenerateReportView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Generar Reporte" />
-                            <Button mnemonicParsing="false" onAction="#openUploadSignedReportView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Subir Reporte Firmado" />
+                            <Button mnemonicParsing="false" onAction="#openGenerateReportView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Generar Reporte" />
+                            <Button mnemonicParsing="false" onAction="#openUploadSignedReportView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Subir Reporte Firmado" />
                          </children>
                       </VBox>
                    </content>
@@ -78,15 +66,9 @@
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
                          <children>
-                            <Button mnemonicParsing="false" onAction="#openGenerateSelfEvaluationView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Generar Autoevaluación" />
-                            <Button mnemonicParsing="false" onAction="#openUploadSelfEvaluationView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Subir Autoevaluación" />
-                            <Button mnemonicParsing="false" onAction="#openUploadOrganizationEvaluationView"
-                                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"
-                                    text="Subir Eval. de Organización" />
+                            <Button mnemonicParsing="false" onAction="#openGenerateSelfEvaluationView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Generar Autoevaluación" />
+                            <Button mnemonicParsing="false" onAction="#openUploadSelfEvaluationView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Subir Autoevaluación" />
+                            <Button mnemonicParsing="false" onAction="#openUploadOrganizationEvaluationView" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Subir Eval. de Organización" />
                          </children>
                       </VBox>
                    </content>
@@ -95,6 +77,12 @@
 
               </panes>
             </Accordion>
+
+            <Button mnemonicParsing="false" onAction="#handleCerrarSesion" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 6; -fx-font-weight: bold; -fx-cursor: hand;" text="Cerrar Sesión">
+               <font><Font size="13.0" /></font>
+               <VBox.margin><Insets bottom="30.0" left="20.0" top="15.0" /></VBox.margin>
+            </Button>
+
          </children>
       </VBox>
    </left>

@@ -8,15 +8,18 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import logic.businessObject.User;
 import logic.dao.UserDAO;
 import logic.exceptions.DAOException;
+import logic.util.SessionContext; 
 
-public class StudentMenuGUIController implements Initializable {
+public class StudentMenuGUIController implements  javafx.fxml.Initializable {
 
     @FXML
     private StackPane contentStackPane;
@@ -30,27 +33,20 @@ public class StudentMenuGUIController implements Initializable {
 
     public void setUsuarioLogueado(User user) {
         try {
-            this.practitionerEnrollment =
-                userDAO.getPractitionerEnrollmentByUserId(user.getIdUser());
+            this.practitionerEnrollment = userDAO.getPractitionerEnrollmentByUserId(user.getIdUser());
             openRequestProjectView();
         } catch (DAOException e) {
-            showAlert("Error de sesión",
-                "No se pudo obtener la información del estudiante: " + e.getMessage());
+            showAlert("Error de sesión", "No se pudo obtener la información del estudiante: " + e.getMessage());
         }
     }
-
-   
 
     @FXML
     private void openMyProjectView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/gui/fxml/ConsultMyProjectGUI.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/fxml/ConsultMyProjectGUI.fxml"));
             Node view = loader.load();
 
             ConsultMyProjectGUIController controller = loader.getController();
-       
 
             contentStackPane.getChildren().clear();
             contentStackPane.getChildren().add(view);
@@ -58,8 +54,7 @@ public class StudentMenuGUIController implements Initializable {
         } catch (IOException e) {
             handleException(e, "/gui/fxml/ConsultMyProjectGUI.fxml");
         } catch (NullPointerException e) {
-            showAlert("Vista en construcción",
-                "El archivo MyProjectGUI.fxml aún no ha sido creado.");
+            showAlert("Vista en construcción", "El archivo MyProjectGUI.fxml aún no ha sido creado.");
         }
     }
 
@@ -108,12 +103,29 @@ public class StudentMenuGUIController implements Initializable {
         loadView("/gui/fxml/UploadOrganizationEvaluation.fxml");
     }
 
-   
+    @FXML
+    private void handleCerrarSesion(ActionEvent event) {
+
+        SessionContext.getInstance().clear();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/fxml/LogingGUI.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sistema de Prácticas — Iniciar Sesión");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            handleException(e, "/gui/fxml/LoginGUI.fxml");
+        }
+    }
+
     private void openRequestProjectView() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/gui/fxml/RequestProjectGUI.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/fxml/RequestProjectGUI.fxml"));
             Node view = loader.load();
 
             RequestProjectGUIController controller = loader.getController();
@@ -125,8 +137,7 @@ public class StudentMenuGUIController implements Initializable {
         } catch (IOException e) {
             handleException(e, "/gui/fxml/RequestProjectGUI.fxml");
         } catch (NullPointerException e) {
-            showAlert("Vista en construcción",
-                "El archivo RequestProjectGUI.fxml aún no ha sido creado.");
+            showAlert("Vista en construcción", "El archivo RequestProjectGUI.fxml aún no ha sido creado.");
         }
     }
 
@@ -138,8 +149,7 @@ public class StudentMenuGUIController implements Initializable {
         } catch (IOException e) {
             handleException(e, fxmlPath);
         } catch (NullPointerException e) {
-            showAlert("Vista en construcción",
-                "El archivo FXML " + fxmlPath + " aún no ha sido creado.");
+            showAlert("Vista en construcción", "El archivo FXML " + fxmlPath + " aún no ha sido creado.");
         }
     }
 

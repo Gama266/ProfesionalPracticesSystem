@@ -27,20 +27,12 @@ import logic.businessObject.Teacher;
 import logic.exceptions.DAOException;
 import logic.idao.IReportReviewDAO;
 
-/**
- * Implementación JDBC del repositorio de revisiones de reportes firmados.
- *
- * Referencias a tablas reales de BD:
- *   - revision_reporte  (nueva, creada por migration_reviews.sql)
- *   - reportes          (tabla real: idReporte, URL, tipoReporte, matricula)
- *   - practicante       (tabla real de alumnos)
- *   - profesor          (tabla real de profesores)
- */
+
 public class ReportReviewDAO implements IReportReviewDAO {
 
     private static final Logger LOG = Logger.getLogger(ReportReviewDAO.class.getName());
 
-    // ── SQL constants ─────────────────────────────────────────────────────────
+   
 
     private static final String SQL_UPSERT =
         "INSERT INTO revision_reporte " +
@@ -54,10 +46,7 @@ public class ReportReviewDAO implements IReportReviewDAO {
         "  justificacion  = VALUES(justificacion),  " +
         "  fechaRevision  = VALUES(fechaRevision)";
 
-    /**
-     * Vista del profesor: lista los reportes de un alumno con sus revisiones.
-     * JOIN a reportes (no a 'Reporte') — columna URL en mayúsculas.
-     */
+ 
     private static final String SQL_BY_STUDENT_AND_TEACHER =
         "SELECT rr.idRevision, rr.matricula, rr.noPersonal, rr.tipoReporte, " +
         "       rr.idReporte, rr.estadoEntrega, rr.estadoRevision, " +
@@ -65,14 +54,12 @@ public class ReportReviewDAO implements IReportReviewDAO {
         "       rep.URL AS reportUrl, " +
         "       p.nombre, p.apellidoPaterno, p.apellidoMaterno " +
         "FROM revision_reporte rr " +
-        "LEFT JOIN reportes rep ON rr.idReporte = rep.idReporte " +   // tabla: reportes, PK: idReporte
-        "LEFT JOIN practicante p ON rr.matricula = p.matricula " +    // tabla: practicante (no students)
+        "LEFT JOIN reportes rep ON rr.idReporte = rep.idReporte " +  
+        "LEFT JOIN practicante p ON rr.matricula = p.matricula " +  
         "WHERE rr.matricula = ? AND rr.noPersonal = ? " +
         "ORDER BY rr.tipoReporte";
 
-    /**
-     * Vista del alumno: lista todas sus revisiones de reportes (todos los profesores).
-     */
+   
     private static final String SQL_BY_STUDENT =
         "SELECT rr.idRevision, rr.matricula, rr.noPersonal, rr.tipoReporte, " +
         "       rr.idReporte, rr.estadoEntrega, rr.estadoRevision, " +
@@ -169,7 +156,7 @@ public class ReportReviewDAO implements IReportReviewDAO {
         return reviews;
     }
 
-    // ── Private helpers ───────────────────────────────────────────────────────
+ 
 
     private ReportReview mapRow(ResultSet rs, boolean includeTeacher) throws SQLException {
         ReportReview review = new ReportReview();
@@ -184,7 +171,7 @@ public class ReportReviewDAO implements IReportReviewDAO {
 
         int idRep = rs.getInt("idReporte");
         if (!rs.wasNull()) review.setIdReport(idRep);
-        review.setReportUrl(rs.getString("reportUrl"));   // alias de URL
+        review.setReportUrl(rs.getString("reportUrl"));   
 
         Student student = new Student();
         student.setMatricula(rs.getString("matricula"));

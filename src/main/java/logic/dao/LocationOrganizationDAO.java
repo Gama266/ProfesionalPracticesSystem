@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package logic.dao;
 
 import dataacces.ConfigDatabase;
@@ -18,9 +15,7 @@ import logic.idao.ILocationOrganizationDAO;
  * * @author gamal
  */
 public class LocationOrganizationDAO implements ILocationOrganizationDAO {
-    
-  
-    
+
   @Override
     public boolean registerLocation(LocationOrganization newLocation) throws DAOException {
         boolean isRegistered = false;

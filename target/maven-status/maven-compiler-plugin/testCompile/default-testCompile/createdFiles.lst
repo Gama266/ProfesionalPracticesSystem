@@ -1,0 +1,6 @@
+logic\dao\TeacherDAOTest.class
+logic\dao\UserDAOTest.class
+logic\dao\LocationOrganizationDAOTest.class
+logic\dao\TechnicalResponsibleDAOTest.class
+logic\dao\ProjectDAOTest.class
+logic\dao\LinkedOrganizationDAOTest.class

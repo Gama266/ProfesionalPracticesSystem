@@ -333,4 +333,25 @@ public class StudentDAO implements IStudentDAO {
         }
         return data;
     }
+    
+    @Override
+    public boolean assignEducationalExperience(String matricula, int nrc, int numeroInscripcion) throws DAOException {
+        
+        String queryAssignEE = "INSERT INTO cursaexperienciaeducativa (matricula, nrc, numeroInscripcion) VALUES (?, ?, ?)";
+
+        try {
+            Connection connection = ConfigDatabase.getConnection();
+            try (PreparedStatement statementAssign = connection.prepareStatement(queryAssignEE)) {
+                
+                statementAssign.setString(1, matricula);
+                statementAssign.setInt(2, nrc);
+                statementAssign.setInt(3, numeroInscripcion); // <--- Aquí se asigna
+
+                int rowsAffected = statementAssign.executeUpdate();
+                return rowsAffected > 0;
+            }
+        } catch (SQLException exceptionDB) {
+            throw new DAOException("Error al vincular al estudiante con la EE: " + exceptionDB.getMessage(), exceptionDB);
+        }
+    }
 }

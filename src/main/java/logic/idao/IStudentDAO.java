@@ -23,5 +23,6 @@ public interface IStudentDAO {
 Student getStudentByIdUser(int idUser) throws DAOException;
  int getProjectIdByEnrollment(String enrollment)throws DAOException ;
  ReportGeneralData getReportGeneralData(String matricula) throws DAOException;
+ boolean assignEducationalExperience(String matricula, int nrc, int numeroInscripcion) throws DAOException;
 
 }

@@ -71,6 +71,7 @@ gui\controller\ConsultEducationalExperienceGUIController.class
 gui\controller\coordinatorUsesCase\RegisterTechnicalResponsibleGUIController.class
 gui\controller\DeactivateStudentController.class
 gui\usersviews\CoordinatorMenuController.class
+gui\controller\RegisterStudentController$1.class
 logic\util\SessionContext.class
 gui\controller\RegisterProjectController$2.class
 logic\idao\IProjectDAO.class

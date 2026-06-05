@@ -26,6 +26,7 @@ public class TeacherDAO implements ITeacherDAO {
     @Override
     public boolean registerTeacher(Teacher newTeacher) throws DAOException {
         
+        
         String queryRegisterTeacher = 
             "INSERT INTO profesor " +
             "(numeroPersonal, nombre, apellidoPaterno, apellidoMaterno, " +
@@ -106,11 +107,7 @@ public class TeacherDAO implements ITeacherDAO {
         }
     }
     
-    /**
-     * Retrieves a list of all teachers registered in the database.
-     * @return List of Teacher objects.
-     * @throws DAOException if a database error occurs.
-     */
+  
     @Override
     public List<Teacher> getAllTeachers() throws DAOException {
         String queryGetAll =         

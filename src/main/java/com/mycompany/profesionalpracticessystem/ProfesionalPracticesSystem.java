@@ -14,7 +14,7 @@ public class ProfesionalPracticesSystem extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
- Parent root = FXMLLoader.load(getClass().getResource("/gui/fxml/LogingGUI.fxml"));
+ Parent root = FXMLLoader.load(getClass().getResource("/gui/fxml/CoordinatorMenuGUI.fxml"));
 
         Scene scene = new Scene(root);
 

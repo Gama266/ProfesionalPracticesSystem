@@ -2,5 +2,6 @@ C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\s
 C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\src\test\java\logic\dao\LinkedOrganizationDAOTest.java
 C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\src\test\java\logic\dao\LocationOrganizationDAOTest.java
 C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\src\test\java\logic\dao\ProjectDAOTest.java
-C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\src\test\java\logic\dao\StudentDAOTest.java
 C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\src\test\java\logic\dao\TeacherDAOTest.java
+C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\src\test\java\logic\dao\TechnicalResponsibleDAOTest.java
+C:\Users\gamal\OneDrive\Documentos\NetBeansProjects\ProfesionalPracticesSystem\src\test\java\logic\dao\UserDAOTest.java

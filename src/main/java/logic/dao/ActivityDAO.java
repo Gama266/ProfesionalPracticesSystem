@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import dataacces.ConfigDatabase;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import logic.businessObject.Activity;
 import logic.businessObject.Project;
 import logic.exceptions.DAOException;
@@ -286,8 +288,8 @@ public double getTotalHoursByProject(int projectId)
     return 0;
 }
 
-public java.util.Map<Integer, Integer> getMaxProgressByProject(int idProyecto) throws DAOException {
-    java.util.Map<Integer, Integer> progressMap = new java.util.HashMap<>();
+public Map<Integer, Integer> getMaxProgressByProject(int idProyecto) throws DAOException {
+    Map<Integer, Integer> progressMap = new HashMap<>();
     String sql =
         "SELECT aa.idActividad, MAX(aa.porcentajeAvance) AS maxAvance " +
         "FROM AvanceActividad aa " +

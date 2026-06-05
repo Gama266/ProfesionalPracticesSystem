@@ -30,7 +30,6 @@
       </VBox>
    </left>
    <center>
-      <!-- El id ahora coincide con el nombre en inglés del controlador -->
       <StackPane fx:id="contentStackPane" style="-fx-background-color: #f1f5f9;" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

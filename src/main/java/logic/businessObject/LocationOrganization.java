@@ -13,6 +13,13 @@ package logic.businessObject;
     private String country;
     private String state;
 
+    
+    public LocationOrganization(int id, String country, String state) {
+    this.id = id;
+    this.country = country;
+    this.state = state;
+}
+    
     public LocationOrganization() {
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="650.0" styleClass="mainFxmlClass"
+<AnchorPane prefHeight="650.0" prefWidth="650.0" styleClass="mainFxmlClass"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="gui.controller.RegisterStudentController">
@@ -27,7 +27,6 @@
         <VBox layoutX="30.0" layoutY="25.0" spacing="20.0" prefWidth="590.0">
             <children>
                 
-                <!-- Título -->
                 <VBox spacing="5.0">
                     <Label text="Registrar Estudiante">
                         <font>
@@ -41,10 +40,12 @@
 
                 <GridPane hgap="15.0" vgap="15.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="NEVER" prefWidth="130.0" />
-                        <ColumnConstraints hgrow="ALWAYS" prefWidth="400.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="NEVER" prefWidth="160.0" />
+                        <ColumnConstraints hgrow="ALWAYS" prefWidth="370.0" />
                     </columnConstraints>
                     <rowConstraints>
+                        <RowConstraints minHeight="40.0" />
+                        <RowConstraints minHeight="40.0" />
                         <RowConstraints minHeight="40.0" />
                         <RowConstraints minHeight="40.0" />
                         <RowConstraints minHeight="40.0" />
@@ -57,7 +58,7 @@
                     <Label text="Matrícula:" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <font><Font name="System Bold" size="13.0" /></font>
                     </Label>
-                    <TextField fx:id="enrollmentField" promptText="S21013456" 
+                    <TextField fx:id="textFieldEnrollment" promptText="S21013456" 
                                GridPane.rowIndex="0" GridPane.columnIndex="1">
                         <font><Font size="13.0" /></font>
                     </TextField>
@@ -65,69 +66,72 @@
                     <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0">
                         <font><Font name="System Bold" size="13.0" /></font>
                     </Label>
-                    <TextField fx:id="nameField" promptText="Juan Carlos"
+                    <TextField fx:id="textFieldName" promptText="Juan Carlos"
                                GridPane.rowIndex="1" GridPane.columnIndex="1">
                         <font><Font size="13.0" /></font>
                     </TextField>
 
-                    <!-- Apellido Paterno -->
                     <Label text="Apellido Paterno:" GridPane.rowIndex="2" GridPane.columnIndex="0">
                         <font><Font name="System Bold" size="13.0" /></font>
                     </Label>
-                    <TextField fx:id="paternalSurnameField" promptText="Pérez"
+                    <TextField fx:id="textFieldPaternalSurname" promptText="Pérez"
                                GridPane.rowIndex="2" GridPane.columnIndex="1">
                         <font><Font size="13.0" /></font>
                     </TextField>
 
-                    <!-- Apellido Materno -->
                     <Label text="Apellido Materno:" GridPane.rowIndex="3" GridPane.columnIndex="0">
                         <font><Font name="System Bold" size="13.0" /></font>
                     </Label>
-                    <TextField fx:id="maternalSurnameField" promptText="González"
+                    <TextField fx:id="textFieldMaternalSurname" promptText="González"
                                GridPane.rowIndex="3" GridPane.columnIndex="1">
                         <font><Font size="13.0" /></font>
                     </TextField>
 
-                    <!-- Correo Electrónico -->
                     <Label text="Correo Electrónico:" GridPane.rowIndex="4" GridPane.columnIndex="0">
                         <font><Font name="System Bold" size="13.0" /></font>
                     </Label>
-                    <TextField fx:id="emailField" promptText="juan.perez@ejemplo.com"
+                    <TextField fx:id="textFieldEmail" promptText="juan.perez@ejemplo.com"
                                GridPane.rowIndex="4" GridPane.columnIndex="1">
                         <font><Font size="13.0" /></font>
                     </TextField>
 
-                    <!-- Contraseña -->
                     <Label text="Contraseña:" GridPane.rowIndex="5" GridPane.columnIndex="0">
                         <font><Font name="System Bold" size="13.0" /></font>
                     </Label>
-                    <PasswordField fx:id="passwordField" promptText="Mínimo 8 caracteres"
+                    <PasswordField fx:id="passwordFieldPassword" promptText="Mínimo 8 caracteres"
                                    GridPane.rowIndex="5" GridPane.columnIndex="1">
                         <font><Font size="13.0" /></font>
                     </PasswordField>
 
-                    <!-- Confirmar Contraseña -->
                     <Label text="Confirmar Contraseña:" GridPane.rowIndex="6" GridPane.columnIndex="0">
                         <font><Font name="System Bold" size="13.0" /></font>
                     </Label>
-                    <PasswordField fx:id="confirmPasswordField" promptText="Repite la contraseña"
+                    <PasswordField fx:id="passwordFieldConfirmPassword" promptText="Repite la contraseña"
                                    GridPane.rowIndex="6" GridPane.columnIndex="1">
                         <font><Font size="13.0" /></font>
                     </PasswordField>
 
+                    <Label text="Experiencia Educativa:" GridPane.rowIndex="7" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <ComboBox fx:id="comboBoxEducationalExperience" prefWidth="370.0" promptText="Seleccione una experiencia..." 
+                              GridPane.rowIndex="7" GridPane.columnIndex="1" />
+
+                    <Label text="Oportunidad / Inscripción:" GridPane.rowIndex="8" GridPane.columnIndex="0">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                    <ComboBox fx:id="comboBoxEnrollmentNumber" prefWidth="370.0" promptText="Seleccione la inscripción..." 
+                              GridPane.rowIndex="8" GridPane.columnIndex="1" />
                 </GridPane>
+                <Label fx:id="labelError" style="-fx-text-fill: #dc2626; -fx-font-size: 13px;" />
 
-                <!-- Mensaje de Error -->
-                <Label fx:id="errorLabel" style="-fx-text-fill: #dc2626; -fx-font-size: 13px;" />
-
-                <!-- Botones -->
                 <HBox alignment="CENTER_RIGHT" spacing="15.0">
                     <children>
-                        <Button fx:id="clearButton" onAction="#handleClear" 
+                        <Button fx:id="buttonClear" onAction="#handleClear" 
                                 prefWidth="100.0" prefHeight="35.0"
                                 style="-fx-background-color: #6b7280; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 13px;"
                                 text="Limpiar" />
-                        <Button fx:id="registerButton" onAction="#handleRegister"
+                        <Button fx:id="buttonRegister" onAction="#handleRegister"
                                 prefWidth="100.0" prefHeight="35.0"
                                 style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 13px; -fx-font-weight: bold;"
                                 text="Registrar" />

@@ -11,12 +11,9 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.usersviews.CoordinatorMenuController">
-   
- 
    <left>
       <VBox prefHeight="700.0" prefWidth="260.0" style="-fx-background-color: #1e293b;" BorderPane.alignment="CENTER">
          <children>
-     
             <Label text="Sistema Prácticas" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="22.0" />
@@ -34,11 +31,9 @@
                </VBox.margin>
             </Label>
 
-         
             <Accordion VBox.vgrow="ALWAYS">
               <panes>
                 
-               
                 <TitledPane animated="true" text="Organizaciones Vinculadas">
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
@@ -54,6 +49,7 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                 </TitledPane>
+                
                 <TitledPane animated="true" text="Proyectos">
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
@@ -71,7 +67,6 @@
                      </font>
                 </TitledPane>
 
-         
                 <TitledPane animated="true" text="Exp. Educativas">
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
@@ -85,6 +80,7 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                 </TitledPane>          
+                
                 <TitledPane animated="true" text="Estudiantes">
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
@@ -100,7 +96,6 @@
                      </font>
                 </TitledPane>
 
-               
                 <TitledPane animated="true" text="Profesores">
                    <content>
                       <VBox spacing="5.0" style="-fx-background-color: #334155;">
@@ -116,13 +111,17 @@
 
               </panes>
             </Accordion>
+
+            <Button mnemonicParsing="false" onAction="#handleCerrarSesion" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 6; -fx-font-weight: bold; -fx-cursor: hand;" text="Cerrar Sesión">
+               <font><Font size="13.0" /></font>
+               <VBox.margin><Insets bottom="30.0" left="20.0" top="15.0" /></VBox.margin>
+            </Button>
+
          </children>
       </VBox>
    </left>
 
-  
    <center>
       <StackPane fx:id="spContenido" style="-fx-background-color: #f1f5f9;" BorderPane.alignment="CENTER" />
    </center>
-   
 </BorderPane>

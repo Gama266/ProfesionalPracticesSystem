@@ -4,259 +4,370 @@
  */
 package logic.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import dataacces.ConfigDatabase;
 import logic.businessObject.LinkedOrganization;
 import logic.businessObject.Project;
+import logic.businessObject.Teacher;
+import logic.businessObject.TechnicalResponsible;
 import logic.exceptions.DAOException;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectDAOTest {
 
-    static {
-        System.setProperty("net.bytebuddy.experimental", "true");
-    }
-
-    @Mock private Connection databaseConnection;
-    @Mock private PreparedStatement preparedStatement;
-    @Mock private ResultSet resultSet;
-
-    private ProjectDAO projectDAO;
+    @Mock private Connection mockConnection;
+    @Mock private PreparedStatement mockStmt;
+    @Mock private PreparedStatement mockStmt2;
+    @Mock private PreparedStatement mockStmt3;
+    @Mock private ResultSet mockRs;
+    private ProjectDAO dao;
 
     @BeforeEach
-    void setUp() throws Exception {
-        projectDAO = new ProjectDAO();
-    }
+    void setUp() { dao = new ProjectDAO(); }
 
-    private Project buildProject(int idProject, String projectName) {
+    private Project buildProject() {
         Project project = new Project();
-        project.setId(idProject);
-        project.setName(projectName);
-        project.setDescription("Project Description");
-        project.setMethodology("Agile");
+        project.setId(1);
+        project.setName("Sistema de inventario");
+        project.setDescription("Descripción");
+        project.setMethodology("Scrum");
         project.setActivityStatus(true);
-        project.setObjective("Project Objective");
-        project.setRegistrationDate(LocalDate.now());
+        project.setObjective("Automatizar inventario");
+        project.setRegistrationDate(LocalDate.of(2024, 1, 15));
         project.setAvailableSpaces(3);
-
-        LinkedOrganization organization = new LinkedOrganization();
-        organization.setId(1);
-        project.setLinkedOrganization(organization);
-
+        LinkedOrganization org = new LinkedOrganization();
+        org.setId(10);
+        project.setLinkedOrganization(org);
+        Teacher teacher = new Teacher();
+        teacher.setNoPersonal(101);
+        project.setTeacher(teacher);
+        TechnicalResponsible resp = new TechnicalResponsible();
+        resp.setId(5);
+        project.setTechnicalResponsible(resp);
         return project;
     }
 
-    @Test
-    void registerProject_successful_returnsTrue() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
+    private Project buildProjectNullables() {
+        Project p = new Project();
+        p.setId(1);
+        p.setName("Proyecto mínimo");
+        p.setDescription("Desc");
+        p.setMethodology("Kanban");
+        p.setActivityStatus(false);
+        p.setObjective("Objetivo");
+        p.setRegistrationDate(null);
+        p.setAvailableSpaces(0);
+        p.setLinkedOrganization(null);
+        p.setTeacher(null);
+        p.setTechnicalResponsible(null);
+        return p;
+    }
 
-        Project project = buildProject(1, "Sistema Institucional");
+    private void stubActiveResultSet() throws SQLException {
+        when(mockRs.next()).thenReturn(true, false);
+        when(mockRs.getInt("idProyecto")).thenReturn(1);
+        when(mockRs.getString("nombreProyecto")).thenReturn("Sistema de inventario");
+        when(mockRs.getString("descripcion")).thenReturn("Descripción");
+        when(mockRs.getString("metodologia")).thenReturn("Scrum");
+        when(mockRs.getString("objetivos")).thenReturn("Automatizar inventario");
+        when(mockRs.getBoolean("estadoActividad")).thenReturn(true);
+        when(mockRs.getInt("cupo")).thenReturn(3);
+        when(mockRs.getDate("fechaRegistro")).thenReturn(Date.valueOf("2024-01-15"));
+        when(mockRs.getInt("IdOrganizacionVinculada")).thenReturn(10);
+        when(mockRs.getString("nombreOrganizacion")).thenReturn("UVER");
+    }
 
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
 
-            boolean result = projectDAO.registerProject(project);
 
-            assertTrue(result);
+    @Test void register_WithAllFields_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(1);
+            assertTrue(dao.registerProject(buildProject()));
         }
     }
 
-    @Test
-    void registerProject_noRowsAffected_returnsFalse() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(0);
-
-        Project project = buildProject(1, "Sistema Institucional");
-
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            boolean result = projectDAO.registerProject(project);
-
-            assertFalse(result);
+    @Test void register_WithNullableFields_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(1);
+            assertTrue(dao.registerProject(buildProjectNullables()));
         }
     }
 
-    @Test
-    void registerProject_sqlException_throwsDAOException() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate())
-            .thenThrow(new SQLException("Failed to save project", "23000", 1));
-
-        Project project = buildProject(1, "Sistema Institucional");
-
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            assertThrows(DAOException.class, new Executable() {
-                @Override
-                public void execute() throws Throwable {
-                    projectDAO.registerProject(project);
-                }
-            });
+    @Test void register_NoRows_ReturnsFalse() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(0);
+            assertFalse(dao.registerProject(buildProject()));
         }
     }
 
-    @Test
-    void updateProject_successful_returnsTrue() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        Project project = buildProject(1, "Sistema Actualizado");
-
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            boolean result = projectDAO.updateProject(project);
-
-            assertTrue(result);
+    @Test void register_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.registerProject(buildProject()));
         }
     }
 
-    @Test
-    void hideProject_successful_returnsTrue() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
 
-            boolean result = projectDAO.hideProject(10);
-
-            assertTrue(result);
+    @Test void update_WithAllFields_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(1);
+            assertTrue(dao.updateProject(buildProject()));
         }
     }
 
-    @Test
-    void getAllActiveProjects_successful_returnsListWithElements() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true).thenReturn(false);
-        when(resultSet.getInt("idProyecto")).thenReturn(1);
-        when(resultSet.getString("nombreProyecto")).thenReturn("Proyecto Base");
-        when(resultSet.getDate("fechaRegistro"))
-            .thenReturn(Date.valueOf(LocalDate.now()));
-
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            List<Project> activeProjects = projectDAO.getAllActiveProjects();
-
-            assertNotNull(activeProjects);
-            assertEquals(1, activeProjects.size());
-            assertEquals("Proyecto Base", activeProjects.get(0).getName());
+    @Test void update_WithNullableFields_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(1);
+            assertTrue(dao.updateProject(buildProjectNullables()));
         }
     }
 
-    @Test
-    void getAllActiveProjects_sqlException_throwsDAOException() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery())
-            .thenThrow(new SQLException("Query failed", "08001", 1));
-
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            assertThrows(DAOException.class, new Executable() {
-                @Override
-                public void execute() throws Throwable {
-                    projectDAO.getAllActiveProjects();
-                }
-            });
+    @Test void update_NoRows_ReturnsFalse() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(0);
+            assertFalse(dao.updateProject(buildProject()));
         }
     }
 
-    @Test
-    void getProjectById_existingId_returnsProject() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt("idProyecto")).thenReturn(99);
-        when(resultSet.getString("nombre")).thenReturn("Proyecto Especifico");
-
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            Project result = projectDAO.getProjectById(99);
-
-            assertNotNull(result);
-            assertEquals(99, result.getId());
-            assertEquals("Proyecto Especifico", result.getName());
+    @Test void update_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.updateProject(buildProject()));
         }
     }
 
-    @Test
-    void getProjectById_nonExistingId_returnsNull() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(false); 
 
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
 
-            Project result = projectDAO.getProjectById(999);
-
-            assertNull(result);
+    @Test void hide_Success_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(1);
+            assertTrue(dao.hideProject(1));
         }
     }
 
-    @Test
-    void assignProjectToStudent_successful_returnsTrue() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            boolean result = projectDAO.assignProjectToStudent("S12345678", 1);
-
-            assertTrue(result);
+    @Test void hide_NoRows_ReturnsFalse() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(0);
+            assertFalse(dao.hideProject(99));
         }
     }
 
-    @Test
-    void assignProjectToStudent_sqlException_throwsDAOException() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate())
-            .thenThrow(new SQLException("Constraint violation", "23000", 1062));
+    @Test void hide_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.hideProject(1));
+        }
+    }
 
-        try (MockedStatic<ConfigDatabase> mockedDatabase = mockStatic(ConfigDatabase.class)) {
-            mockedDatabase.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
 
-            assertThrows(DAOException.class, new Executable() {
-                @Override
-                public void execute() throws Throwable {
-                    projectDAO.assignProjectToStudent("S12345678", 1);
-                }
-            });
+
+    @Test void reactivate_Success_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(1);
+            assertTrue(dao.reactivateProject(1));
+        }
+    }
+
+    @Test void reactivate_NoRows_ReturnsFalse() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeUpdate()).thenReturn(0);
+            assertFalse(dao.reactivateProject(99));
+        }
+    }
+
+    @Test void reactivate_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.reactivateProject(1));
+        }
+    }
+
+
+
+    @Test void getActive_ReturnsList() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            stubActiveResultSet();
+
+            List<Project> result = dao.getAllActiveProjects();
+            assertEquals(1, result.size());
+            assertEquals("Sistema de inventario", result.get(0).getName());
+        }
+    }
+
+    @Test void getActive_NullDate_MapsCorrectly() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            stubActiveResultSet();
+            when(mockRs.getDate("fechaRegistro")).thenReturn(null);
+
+            List<Project> result = dao.getAllActiveProjects();
+            assertNull(result.get(0).getRegistrationDate());
+        }
+    }
+
+    @Test void getActive_EmptyTable_ReturnsEmptyList() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(false);
+            assertTrue(dao.getAllActiveProjects().isEmpty());
+        }
+    }
+
+    @Test void getActive_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.getAllActiveProjects());
+        }
+    }
+
+
+
+    @Test void getAll_ReturnsList() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            stubActiveResultSet();
+
+            List<Project> result = dao.retrieveAllProjectsIncludingInactive();
+            assertEquals(1, result.size());
+        }
+    }
+
+    @Test void getAll_EmptyTable_ReturnsEmptyList() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(false);
+            assertTrue(dao.retrieveAllProjectsIncludingInactive().isEmpty());
+        }
+    }
+
+    @Test void getAll_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.retrieveAllProjectsIncludingInactive());
+        }
+    }
+
+
+
+
+    @Test void getById_Found_ReturnsProject() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(true);
+            when(mockRs.getInt("idProyecto")).thenReturn(1);
+            when(mockRs.getString("nombre")).thenReturn("Sistema de inventario");
+            when(mockRs.getString("descripcion")).thenReturn("Descripción");
+            when(mockRs.getString("metodologia")).thenReturn("Scrum");
+            when(mockRs.getBoolean("estadoActividad")).thenReturn(true);
+            when(mockRs.getString("objetivos")).thenReturn("Automatizar inventario");
+            when(mockRs.getDate("fechaRegistro")).thenReturn(Date.valueOf("2024-01-15"));
+
+            assertNotNull(dao.getProjectById(1));
+        }
+    }
+
+    @Test void getById_NotFound_ReturnsNull() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(false);
+            assertNull(dao.getProjectById(99));
+        }
+    }
+
+    @Test void getById_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.getProjectById(1));
+        }
+    }
+
+
+    // ── assignProjectToStudent ───────────────────────────────────────────────
+
+    @Test void assign_Success_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            // tres prepareStatement en orden: assign, decrement, deactivate
+            when(mockConnection.prepareStatement(anyString()))
+                    .thenReturn(mockStmt, mockStmt2, mockStmt3);
+
+            assertTrue(dao.assignProjectToStudent("zS21012345", 1));
+            verify(mockConnection).commit();
+        }
+    }
+
+    @Test void assign_InnerException_RollsBackAndThrows() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString()))
+                    .thenReturn(mockStmt, mockStmt2, mockStmt3);
+            when(mockStmt.executeUpdate()).thenThrow(new SQLException("fallo"));
+
+            assertThrows(DAOException.class,
+                    () -> dao.assignProjectToStudent("zS21012345", 1));
+            verify(mockConnection).rollback();
+        }
+    }
+
+    @Test void assign_ConnectionFails_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenThrow(SQLException.class);
+            assertThrows(DAOException.class,
+                    () -> dao.assignProjectToStudent("zS21012345", 1));
         }
     }
 }

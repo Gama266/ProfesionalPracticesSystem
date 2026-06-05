@@ -118,4 +118,20 @@ public class EducationalExperienceDAO implements IEducationalExperienceDAO{
         experience.setSection(resultSet.getString("seccion"));
         return experience;
     }
+@Override
+public List<EducationalExperience> getAllEducationalExperiences() throws DAOException {
+    String sql = "SELECT * FROM experienciaeducativa";
+    List<EducationalExperience> experiences = new ArrayList<>();
+    try (Connection conn = ConfigDatabase.getConnection();
+         PreparedStatement preparedStatement = conn.prepareStatement(sql);
+         ResultSet resultSet = preparedStatement.executeQuery()) {
+        while (resultSet.next()) {
+            experiences.add(mapResultSetToEducationalExperience(resultSet));
+        }
+    } catch (SQLException e) {
+        throw new DAOException("Error al obtener el catálogo de experiencias educativas", e);
+    }
+    return experiences;
+}
+
 }

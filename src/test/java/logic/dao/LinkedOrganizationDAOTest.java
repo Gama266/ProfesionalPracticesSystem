@@ -3,163 +3,169 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
 package logic.dao;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+ 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+ 
+import java.sql.*;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import dataacces.ConfigDatabase;
 import logic.businessObject.LinkedOrganization;
 import logic.businessObject.LocationOrganization;
 import logic.exceptions.DAOException;
 import logic.exceptions.DatabaseConnectionException;
 import logic.exceptions.DuplicateRecordException;
-
+ 
 @ExtendWith(MockitoExtension.class)
 class LinkedOrganizationDAOTest {
-
-    static {
-        System.setProperty("net.bytebuddy.experimental", "true");
-    }
-
-    @Mock private Connection databaseConnection;
-    @Mock private PreparedStatement preparedStatement;
-    @Mock private ResultSet resultSet;
-
-    private LinkedOrganizationDAO linkedOrganizationDAO;
-
+ 
+    @Mock private Connection mockConnection;
+    @Mock private PreparedStatement mockStmt;
+    @Mock private PreparedStatement mockStmt2;
+    @Mock private ResultSet mockRs;
+    private LinkedOrganizationDAO dao;
+ 
     @BeforeEach
-    void setUp() throws Exception {
-        linkedOrganizationDAO = new LinkedOrganizationDAO();
+    void setUp() { dao = new LinkedOrganizationDAO(); }
+ 
+    private LinkedOrganization buildOrganization() {
+        LinkedOrganization org = new LinkedOrganization();
+        org.setName("UVER");
+        org.setDireccion("Av. Principal 123");
+        org.setPhoneNumber("2281234567");
+        org.setGmail("contacto@uver.mx");
+        LocationOrganization loc = new LocationOrganization();
+        loc.setId(1);
+        org.setLocationOrganization(loc);
+        return org;
     }
-
-    private LinkedOrganization buildOrganization(int id, String name) {
-        LinkedOrganization organization = new LinkedOrganization();
-        organization.setId(id);
-        organization.setName(name);
-        organization.setDireccion("Avenida Siempre Viva 123");
-        organization.setPhoneNumber("2281234567");
-        organization.setGmail("contacto@organizacion.com");
-
-        LocationOrganization location = new LocationOrganization();
-        location.setId(1);
-        organization.setLocationOrganization(location);
-
-        return organization;
-    }
-
-    @Test
-    void registerLinkedOrganization_successful_returnsTrue() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(0); 
-
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        LinkedOrganization organization = buildOrganization(1, "Organización Nueva");
-
-        try (MockedStatic<ConfigDatabase> mockedDb = mockStatic(ConfigDatabase.class)) {
-            mockedDb.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            boolean result = linkedOrganizationDAO.registerLinkedOrganization(organization);
-
-            assertTrue(result);
+ 
+ 
+    // ── isOrganizationAlreadyRegistered ──────────────────────────────────────
+ 
+    @Test void isRegistered_Exists_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(true);
+            when(mockRs.getInt(1)).thenReturn(1);
+            assertTrue(dao.isOrganizationAlreadyRegistered("UVER"));
         }
     }
-
-    @Test
-    void registerLinkedOrganization_duplicate_throwsDuplicateRecordException() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        
-        // Simulación para isOrganizationAlreadyRegistered (retorna > 0 count = verdadero)
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(1);
-
-        LinkedOrganization organization = buildOrganization(1, "Organización Existente");
-
-        try (MockedStatic<ConfigDatabase> mockedDb = mockStatic(ConfigDatabase.class)) {
-            mockedDb.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            assertThrows(DuplicateRecordException.class, new Executable() {
-                @Override
-                public void execute() throws Throwable {
-                    linkedOrganizationDAO.registerLinkedOrganization(organization);
-                }
-            });
+ 
+    @Test void isRegistered_NotExists_ReturnsFalse() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(true);
+            when(mockRs.getInt(1)).thenReturn(0);
+            assertFalse(dao.isOrganizationAlreadyRegistered("Nueva"));
         }
     }
-
-    @Test
-    void registerLinkedOrganization_sqlException_throwsDAOException() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        
-        // Evadir la excepción de duplicidad
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(0); 
-
-        // Provocar fallo al insertar
-        when(preparedStatement.executeUpdate())
-            .thenThrow(new SQLException("Error al insertar", "23000", 1));
-
-        LinkedOrganization organization = buildOrganization(1, "Organización Fallida");
-
-        try (MockedStatic<ConfigDatabase> mockedDb = mockStatic(ConfigDatabase.class)) {
-            mockedDb.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            assertThrows(DAOException.class, new Executable() {
-                @Override
-                public void execute() throws Throwable {
-                    linkedOrganizationDAO.registerLinkedOrganization(organization);
-                }
-            });
+ 
+    @Test void isRegistered_ThrowsDatabaseConnectionException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DatabaseConnectionException.class,
+                    () -> dao.isOrganizationAlreadyRegistered("UVER"));
         }
     }
-
-    @Test
-    void isOrganizationAlreadyRegistered_exists_returnsTrue() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(1);
-
-        try (MockedStatic<ConfigDatabase> mockedDb = mockStatic(ConfigDatabase.class)) {
-            mockedDb.when(ConfigDatabase::getConnection).thenReturn(databaseConnection);
-
-            boolean result = linkedOrganizationDAO.isOrganizationAlreadyRegistered("Existente SA");
-
-            assertTrue(result);
+ 
+ 
+    // ── registerLinkedOrganization ───────────────────────────────────────────
+ 
+    @Test void register_DuplicateName_ThrowsDuplicateRecordException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(true);
+            when(mockRs.getInt(1)).thenReturn(1);
+            assertThrows(DuplicateRecordException.class,
+                    () -> dao.registerLinkedOrganization(buildOrganization()));
         }
     }
-
-    @Test
-    void isOrganizationAlreadyRegistered_notExists_returnsFalse() throws Exception {
-        when(databaseConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(0);
-
-        try (MockedStatic<ConfigDatabase> mockedDb = mockStatic(ConfigDatabase.class)) {
-            mockedDb.when
+ 
+    @Test void register_New_ReturnsTrue() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            // primera llamada: isOrganizationAlreadyRegistered, segunda: INSERT
+            when(mockConnection.prepareStatement(anyString()))
+                    .thenReturn(mockStmt, mockStmt2);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(true);
+            when(mockRs.getInt(1)).thenReturn(0);
+            when(mockStmt2.executeUpdate()).thenReturn(1);
+            assertTrue(dao.registerLinkedOrganization(buildOrganization()));
+        }
+    }
+ 
+    @Test void register_InsertFails_ReturnsFalse() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString()))
+                    .thenReturn(mockStmt, mockStmt2);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(true);
+            when(mockRs.getInt(1)).thenReturn(0);
+            when(mockStmt2.executeUpdate()).thenReturn(0);
+            assertFalse(dao.registerLinkedOrganization(buildOrganization()));
+        }
+    }
+ 
+    @Test void register_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class,
+                    () -> dao.registerLinkedOrganization(buildOrganization()));
+        }
+    }
+ 
+ 
+    // ── getAllOrganizations ───────────────────────────────────────────────────
+ 
+    @Test void getAll_ReturnsList() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(true, false);
+            when(mockRs.getInt("IdOrganizacionVinculada")).thenReturn(1);
+            when(mockRs.getString("nombreOrganizacion")).thenReturn("UVER");
+            when(mockRs.getString("direccion")).thenReturn("Av. Principal 123");
+            when(mockRs.getString("numeroTelefono")).thenReturn("2281234567");
+ 
+            List<LinkedOrganization> result = dao.getAllOrganizations();
+            assertEquals(1, result.size());
+            assertEquals("UVER", result.get(0).getName());
+        }
+    }
+ 
+    @Test void getAll_EmptyTable_ReturnsEmptyList() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenReturn(mockStmt);
+            when(mockStmt.executeQuery()).thenReturn(mockRs);
+            when(mockRs.next()).thenReturn(false);
+            assertTrue(dao.getAllOrganizations().isEmpty());
+        }
+    }
+ 
+    @Test void getAll_ThrowsException() throws Exception {
+        try (MockedStatic<ConfigDatabase> db = mockStatic(ConfigDatabase.class)) {
+            db.when(ConfigDatabase::getConnection).thenReturn(mockConnection);
+            when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
+            assertThrows(DAOException.class, () -> dao.getAllOrganizations());
+        }
+    }
+}
